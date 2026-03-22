@@ -131,9 +131,9 @@
 <body>
 
 <div class="hero">
-  <h1>🤖 <span>353</span> KI im Alltag</h1>
-  <p>Spielerisch · Abenteuerlich · Lustvoll · Nützlich · Genussvoll<br>Entdecke wie Künstliche Intelligenz deinen Alltag bereichert!</p>
-  <div class="hero-count">✨ 353(Staging) praktische Ideen für dich</div>
+  <h1>🤖 <span>364</span> KI im Alltag</h1>
+  <p>Spielerisch · Abenteuerlich · Lustvoll · Nützlich · Genussvoll<br>Entdecke wie du <strong>ChatGPT · Gemini · Perplexity · Claude</strong> im Alltag nutzen kannst!</p>
+  <div class="hero-count">✨ 364 praktische Ideen für dich</div>
 </div>
 
 <div class="controls">
@@ -141,7 +141,7 @@
     <input type="text" id="search" placeholder="Idee suchen... z.B. Urlaub, Rezept, Budget" oninput="filterCards()">
   </div>
   <div class="filters">
-    <button class="filter-btn active" data-cat="all" onclick="setFilter('all', this)">🌟 Alle (353)</button>
+    <button class="filter-btn active" data-cat="all" onclick="setFilter('all', this)">🌟 Alle (364)</button>
     <button class="filter-btn" data-cat="finanzen" onclick="setFilter('finanzen', this)">💰 Finanzen</button>
     <button class="filter-btn" data-cat="haus" onclick="setFilter('haus', this)">🏡 Haus & Garten</button>
     <button class="filter-btn" data-cat="auto" onclick="setFilter('auto', this)">🚗 Auto & Mobilität</button>
@@ -538,6 +538,17 @@ const ideas = [
   {n:351,cat:"bilder",icon:"🔮",title:"Zukünftiges Ich visualisieren",desc:"KI hilft dir, eine Bild-Beschreibung deines zukünftigen Lebens zu entwickeln – als Vision Board.",how:"Schreib der KI: 'Hilf mir ein Vision Board zu beschreiben: Wo bin ich in 5 Jahren?'"},
   {n:352,cat:"bilder",icon:"🎬",title:"Filmszene neu interpretieren",desc:"Lieblingsfilmszene oder Buchmoment beschreiben – KI gestaltet eine künstlerische Neuinterpretation.",how:"Schreib der KI: 'Erstelle eine Bild-Beschreibung dieser Filmszene im Stil [Impressionismus/etc.]'"},
   {n:353,cat:"bilder",icon:"🧩",title:"Rätsel- oder Spielkarten-Design",desc:"KI entwirft Illustrationen und Texte für selbst gemachte Spiele, Quiz-Karten oder Puzzle.",how:"Schreib der KI: 'Entwirf Design-Ideen für Spielkarten zum Thema [X] für Kinder/Erwachsene.'"},
+  {n:354,cat:"bilder",icon:"📚",title:"Bücherregal fotografieren & auflisten",desc:"Fotografiere dein Bücherregal – KI erkennt alle Bücher, listet sie in Reihenfolge auf und sortiert sie zusätzlich nach Themengebieten.",how:"Foto hochladen und schreib: 'Liste alle Bücher im Regal von links nach rechts auf und gruppiere sie nach Themenbereich.'"},
+  {n:355,cat:"bilder",icon:"🧊",title:"Kühlschrank fotografieren & Rezepte finden",desc:"Kühlschranktür öffnen, Foto machen – KI erkennt alle Zutaten und schlägt passende Rezepte für heute Abend vor.",how:"Foto hochladen: 'Was ist in meinem Kühlschrank? Welche 3 Gerichte kann ich daraus kochen?'"},
+  {n:356,cat:"bilder",icon:"👔",title:"Kleiderschrank fotografieren & Outfits kombinieren",desc:"Kleiderschrank fotografieren – KI erkennt die Kleidungsstücke und kombiniert daraus fertige Outfits für verschiedene Anlässe.",how:"Foto hochladen: 'Erkenne meine Kleidungsstücke und kombiniere 5 Outfits für Alltag, Büro und Freizeit.'"},
+  {n:357,cat:"bilder",icon:"💊",title:"Medikamentenschrank fotografieren & prüfen",desc:"Foto des Medikamentenschranks machen – KI listet alle Präparate auf und weist auf mögliche Wechselwirkungen oder abgelaufene Mittel hin.",how:"Foto hochladen: 'Liste alle Medikamente auf und erkläre welche ich beachten sollte.'"},
+  {n:358,cat:"bilder",icon:"🥫",title:"Speisekammer fotografieren & Einkaufsliste erstellen",desc:"Vorratskammer fotografieren – KI erkennt was vorhanden ist und erstellt automatisch eine Einkaufsliste für fehlendes Grundsortiment.",how:"Foto hochladen: 'Was fehlt in meiner Speisekammer? Erstelle eine Einkaufsliste für Grundvorräte.'"},
+  {n:359,cat:"bilder",icon:"🖼️",title:"Alte Familienfotos beschreiben & archivieren",desc:"Alte analoge Fotos einscannen oder abfotografieren – KI beschreibt Personen, Ort und Epoche und erstellt einen Archivtext.",how:"Foto hochladen: 'Beschreibe dieses alte Foto: Personen, geschätztes Jahr, Ort und Stimmung.'"},
+  {n:360,cat:"bilder",icon:"🔧",title:"Werkzeugkiste fotografieren & inventarisieren",desc:"Werkzeugkiste oder Werkzeugwand fotografieren – KI erstellt eine vollständige Inventarliste und zeigt was fehlt.",how:"Foto hochladen: 'Erstelle eine Inventarliste meines Werkzeugs und nenne wichtige fehlende Basics.'"},
+  {n:361,cat:"bilder",icon:"🌱",title:"Gartenbeete dokumentieren & Wachstum verfolgen",desc:"Gartenbeet regelmäßig fotografieren – KI beschreibt den Wachstumsfortschritt und gibt saisonale Pflegetipps.",how:"Foto hochladen: 'Beschreibe den Zustand meines Beetes und was ich jetzt tun sollte.'"},
+  {n:362,cat:"bilder",icon:"🎒",title:"Rucksack oder Koffer fotografieren & optimieren",desc:"Gepackten Rucksack fotografieren – KI analysiert den Inhalt und schlägt vor was du weglassen oder noch mitnehmen solltest.",how:"Foto hochladen: 'Analysiere meinen gepackten Rucksack für [Reise]. Was fehlt, was ist überflüssig?'"},
+  {n:363,cat:"bilder",icon:"🏷️",title:"Preisschild oder Angebot fotografieren & vergleichen",desc:"Preisschild oder Kassenbon fotografieren – KI hilft dir einzuschätzen ob der Preis fair ist und wo du günstiger kaufen könntest.",how:"Foto hochladen: 'Ist dieser Preis fair für [Produkt]? Wo könnte ich günstiger kaufen?'"},
+  {n:364,cat:"bilder",icon:"🧴",title:"Pflegeprodukte fotografieren & Inhaltsstoffe prüfen",desc:"Shampoo, Creme oder Kosmetik fotografieren – KI liest die Inhaltsstoffe und erklärt was gut oder bedenklich ist.",how:"Foto hochladen: 'Analysiere die Inhaltsstoffe dieses Produkts. Was ist gut, was sollte ich meiden?'"},
 ];
 
 const catLabels = {
