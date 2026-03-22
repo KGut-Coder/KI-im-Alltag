@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>303 KI im Alltag 🚀</title>
+<style>
+  :root {
+    --finance: #f59e0b; --house: #10b981; --car: #3b82f6; --travel: #f97316;
+    --job: #8b5cf6; --food: #ef4444; --health: #06b6d4; --family: #ec4899;
+    --learn: #84cc16; --creative: #a855f7; --bilder: #e11d48;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f8faff; color: #1e293b; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 40%, #f093fb 100%);
+    padding: 60px 20px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero h1 { font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 900; color: #fff; text-shadow: 0 2px 20px rgba(0,0,0,0.2); position: relative; }
+  .hero h1 span { background: rgba(255,255,255,0.2); border-radius: 12px; padding: 0 12px; }
+  .hero p { font-size: clamp(1rem, 2.5vw, 1.3rem); color: rgba(255,255,255,0.9); margin-top: 16px; max-width: 600px; margin-inline: auto; position: relative; line-height: 1.6; }
+  .hero-count { display: inline-block; background: rgba(255,255,255,0.25); backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.4); border-radius: 50px; padding: 8px 24px; color: #fff; font-weight: 700; font-size: 1rem; margin-top: 20px; position: relative; }
+
+  /* CONTROLS */
+  .controls { background: #fff; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 20px rgba(0,0,0,0.08); padding: 16px 20px; }
+  .search-wrap { max-width: 500px; margin: 0 auto 14px; position: relative; }
+  .search-wrap input {
+    width: 100%; padding: 12px 20px 12px 48px; border-radius: 50px;
+    border: 2px solid #e2e8f0; font-size: 1rem; outline: none; transition: border-color .2s;
+    background: #f8faff;
+  }
+  .search-wrap input:focus { border-color: #667eea; background: #fff; }
+  .search-wrap::before { content: '🔍'; position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 1.1rem; }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .filter-btn {
+    padding: 7px 16px; border-radius: 50px; border: 2px solid transparent;
+    font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all .2s;
+    background: #f1f5f9; color: #64748b;
+  }
+  .filter-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+  .filter-btn.active { color: #fff; border-color: transparent; }
+  .filter-btn[data-cat="all"].active { background: linear-gradient(135deg, #667eea, #764ba2); }
+  .filter-btn[data-cat="finanzen"].active { background: var(--finance); }
+  .filter-btn[data-cat="haus"].active { background: var(--house); }
+  .filter-btn[data-cat="auto"].active { background: var(--car); }
+  .filter-btn[data-cat="urlaub"].active { background: var(--travel); }
+  .filter-btn[data-cat="job"].active { background: var(--job); }
+  .filter-btn[data-cat="genuss"].active { background: var(--food); }
+  .filter-btn[data-cat="gesundheit"].active { background: var(--health); }
+  .filter-btn[data-cat="familie"].active { background: var(--family); }
+  .filter-btn[data-cat="lernen"].active { background: var(--learn); }
+  .filter-btn[data-cat="kreativ"].active { background: var(--creative); }
+  .filter-btn[data-cat="bilder"].active { background: var(--bilder); }
+
+  /* STATS BAR */
+  .stats-bar { text-align: center; padding: 12px 20px; color: #64748b; font-size: 0.9rem; }
+  .stats-bar strong { color: #667eea; }
+
+  /* GRID */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; padding: 0 20px 60px; max-width: 1400px; margin: 0 auto; }
+
+  /* CARD */
+  .card {
+    background: #fff; border-radius: 16px; padding: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    transition: transform .2s, box-shadow .2s;
+    border-top: 4px solid #e2e8f0;
+    position: relative; overflow: hidden;
+    animation: fadeIn .3s ease;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.12); }
+  .card[data-cat="finanzen"] { border-top-color: var(--finance); }
+  .card[data-cat="haus"] { border-top-color: var(--house); }
+  .card[data-cat="auto"] { border-top-color: var(--car); }
+  .card[data-cat="urlaub"] { border-top-color: var(--travel); }
+  .card[data-cat="job"] { border-top-color: var(--job); }
+  .card[data-cat="genuss"] { border-top-color: var(--food); }
+  .card[data-cat="gesundheit"] { border-top-color: var(--health); }
+  .card[data-cat="familie"] { border-top-color: var(--family); }
+  .card[data-cat="lernen"] { border-top-color: var(--learn); }
+  .card[data-cat="kreativ"] { border-top-color: var(--creative); }
+  .card[data-cat="bilder"] { border-top-color: var(--bilder); }
+  .card[data-cat="bilder"] .card-tag { background: var(--bilder); }
+
+  .card-num { font-size: 0.75rem; font-weight: 700; color: #94a3b8; margin-bottom: 8px; }
+  .card-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
+  .card-title { font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 6px; line-height: 1.3; }
+  .card-desc { font-size: 0.85rem; color: #64748b; line-height: 1.5; margin-bottom: 12px; }
+  .card-tag {
+    display: inline-block; padding: 3px 10px; border-radius: 50px;
+    font-size: 0.72rem; font-weight: 600; color: #fff;
+  }
+  .card[data-cat="finanzen"] .card-tag { background: var(--finance); }
+  .card[data-cat="haus"] .card-tag { background: var(--house); }
+  .card[data-cat="auto"] .card-tag { background: var(--car); }
+  .card[data-cat="urlaub"] .card-tag { background: var(--travel); }
+  .card[data-cat="job"] .card-tag { background: var(--job); }
+  .card[data-cat="genuss"] .card-tag { background: var(--food); }
+  .card[data-cat="gesundheit"] .card-tag { background: var(--health); }
+  .card[data-cat="familie"] .card-tag { background: var(--family); }
+  .card[data-cat="lernen"] .card-tag { background: var(--learn); }
+  .card[data-cat="kreativ"] .card-tag { background: var(--creative); }
+
+  .card.hidden { display: none; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  .no-results { text-align: center; padding: 60px 20px; color: #94a3b8; font-size: 1.1rem; display: none; }
+  .no-results.show { display: block; }
+
+  footer { text-align: center; padding: 30px; color: #94a3b8; font-size: 0.85rem; background: #fff; border-top: 1px solid #e2e8f0; }
+
+  .card-how { margin: 10px 0; border-radius: 8px; background: #f8faff; }
+.card-how summary { cursor: pointer; font-size: 0.82rem; font-weight: 700; color: #667eea; padding: 6px 10px; list-style: none; }
+.card-how summary::-webkit-details-marker { display: none; }
+.card-how[open] summary { border-bottom: 1px solid #e2e8f0; }
+.card-how p { font-size: 0.8rem; color: #475569; padding: 8px 10px; margin: 0; line-height: 1.5; font-style: italic; }
+
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>🤖 <span>353</span> KI im Alltag</h1>
+  <p>Spielerisch · Abenteuerlich · Lustvoll · Nützlich · Genussvoll<br>Entdecke wie Künstliche Intelligenz deinen Alltag bereichert!</p>
+  <div class="hero-count">✨ 353 praktische Ideen für dich</div>
+</div>
+
+<div class="controls">
+  <div class="search-wrap">
+    <input type="text" id="search" placeholder="Idee suchen... z.B. Urlaub, Rezept, Budget" oninput="filterCards()">
+  </div>
+  <div class="filters">
+    <button class="filter-btn active" data-cat="all" onclick="setFilter('all', this)">🌟 Alle (353)</button>
+    <button class="filter-btn" data-cat="finanzen" onclick="setFilter('finanzen', this)">💰 Finanzen</button>
+    <button class="filter-btn" data-cat="haus" onclick="setFilter('haus', this)">🏡 Haus & Garten</button>
+    <button class="filter-btn" data-cat="auto" onclick="setFilter('auto', this)">🚗 Auto & Mobilität</button>
+    <button class="filter-btn" data-cat="urlaub" onclick="setFilter('urlaub', this)">✈️ Urlaub & Freizeit</button>
+    <button class="filter-btn" data-cat="job" onclick="setFilter('job', this)">💼 Job & Karriere</button>
+    <button class="filter-btn" data-cat="genuss" onclick="setFilter('genuss', this)">🍳 Genuss & Küche</button>
+    <button class="filter-btn" data-cat="gesundheit" onclick="setFilter('gesundheit', this)">💪 Gesundheit</button>
+    <button class="filter-btn" data-cat="familie" onclick="setFilter('familie', this)">👨‍👩‍👧 Familie & Kinder</button>
+    <button class="filter-btn" data-cat="lernen" onclick="setFilter('lernen', this)">📚 Lernen & Bildung</button>
+    <button class="filter-btn" data-cat="kreativ" onclick="setFilter('kreativ', this)">🎨 Kreativität</button>
+    <button class="filter-btn" data-cat="bilder" onclick="setFilter('bilder', this)">🖼️ Bilder & KI</button>
+  </div>
+</div>
+
+<div class="stats-bar"><strong id="count">303</strong> Ideen werden angezeigt</div>
+
+<div class="grid" id="grid"></div>
+<div class="no-results" id="noResults">🤷 Keine Ideen gefunden. Versuch einen anderen Suchbegriff!</div>
+
+<footer>🤖 303 KI im Alltag · Spielerisch die Welt der KI entdecken</footer>
+
+<script>
+const ideas = [
+  // 💰 FINANZEN & GELD (35)
+  {n:1,cat:"finanzen",icon:"💰",title:"Haushaltsbuch analysieren",desc:"Lade deine Ausgaben hoch und lass dir Sparpotenziale, Muster und Tipps direkt erklären.",how:"Schreib der KI: 'Analysiere meine Ausgaben: [Ausgaben einf\u00fcgen] und zeig mir wo ich sparen kann.'"},
+  {n:2,cat:"finanzen",icon:"🎯",title:"Persönlicher Sparplan",desc:"KI erstellt dir einen realistischen Monats-Sparplan – abgestimmt auf dein Gehalt und deine Ziele.",how:"Schreib der KI: 'Erstelle mir einen Sparplan. Ich verdiene X\u20ac netto und m\u00f6chte Y\u20ac pro Monat sparen.'"},
+  {n:3,cat:"finanzen",icon:"📋",title:"Versicherungen verstehen",desc:"Lass dir Versicherungsverträge in einfacher Sprache erklären und Lücken aufzeigen.",how:"Schreib der KI: 'Erkl\u00e4re mir diesen Versicherungsvertrag in einfacher Sprache: [Text einf\u00fcgen]'"},
+  {n:4,cat:"finanzen",icon:"🧾",title:"Steuererklärung vorbereiten",desc:"KI führt dich durch alle Absetzungsmöglichkeiten und erstellt eine Checkliste für dein Finanzamt.",how:"Schreib der KI: 'Erstelle eine Checkliste f\u00fcr meine Steuererkl\u00e4rung als Arbeitnehmer.'"},
+  {n:5,cat:"finanzen",icon:"📝",title:"Kreditvertrag prüfen",desc:"Komplizierte Kreditbedingungen in klare Sprache übersetzen lassen – Fallstricke inklusive.",how:"Schreib der KI: 'Erkl\u00e4re mir diesen Kreditvertrag und markiere Risiken: [Text einf\u00fcgen]'"},
+  {n:6,cat:"finanzen",icon:"📊",title:"Monatsbudget planen",desc:"Gib dein Nettoeinkommen ein und erhalte ein fertiges Budget mit Kategorien für jeden Lebensbereich.",how:"Schreib der KI: 'Erstelle ein Monatsbudget f\u00fcr 2.500\u20ac netto mit Kategorien.'"},
+  {n:7,cat:"finanzen",icon:"💳",title:"Schulden-Tilgungsplan",desc:"KI berechnet die optimale Reihenfolge, um mehrere Schulden schnellstmöglich loszuwerden.",how:"Schreib der KI: 'Ich habe 3 Schulden: [Betrag, Zins]. Welche soll ich zuerst tilgen?'"},
+  {n:8,cat:"finanzen",icon:"📈",title:"Aktien einfach erklärt",desc:"Frag die KI was Dividenden, KGV oder ETFs bedeuten – ohne Fachjargon-Frust.",how:"Schreib der KI: 'Erkl\u00e4re mir Dividenden, KGV und ETFs so als w\u00e4re ich 12 Jahre alt.'"},
+  {n:9,cat:"finanzen",icon:"🌱",title:"ETF-Strategie für Einsteiger",desc:"Lass dir eine einfache, risikoarme Anlagestrategie mit ETFs erklären und zusammenstellen.",how:"Schreib der KI: 'Erstelle eine einfache ETF-Strategie f\u00fcr 100\u20ac monatlich, 20 Jahre Anlagehorizont.'"},
+  {n:10,cat:"finanzen",icon:"🏖️",title:"Rentenplanung vereinfacht",desc:"KI zeigt dir wie viel du heute sparen musst, um deinen Wunsch-Lebensstandard im Alter zu halten.",how:"Schreib der KI: 'Ich bin 35, verdiene 3.000\u20ac netto. Wie viel muss ich sparen um mit 67 gut leben zu k\u00f6nnen?'"},
+  {n:11,cat:"finanzen",icon:"💡",title:"Nebeneinkommen-Ideen",desc:"Beschreibe deine Fähigkeiten und erhalte 10 konkrete Ideen für ein Nebeneinkommen.",how:"Schreib der KI: 'Ich kann gut [F\u00e4higkeit]. Gib mir 10 Ideen f\u00fcr ein Nebeneinkommen.'"},
+  {n:12,cat:"finanzen",icon:"🏠",title:"Nebenkostenabrechnung prüfen",desc:"Lass die Abrechnung deines Vermieters auf Fehler und ungültige Positionen prüfen.",how:"Schreib der KI: 'Pr\u00fcfe diese Nebenkostenabrechnung auf Fehler: [Abrechnung einf\u00fcgen]'"},
+  {n:13,cat:"finanzen",icon:"🤝",title:"Preisverhandlung simulieren",desc:"Übe ein Preisgespräch mit der KI als Gegenüber – z.B. beim Autokauf oder Handwerker.",how:"Schreib der KI: 'Spiel den Verk\u00e4ufer. Ich m\u00f6chte den Preis von 800\u20ac auf 650\u20ac dr\u00fccken. Ich \u00fcbe.'"},
+  {n:14,cat:"finanzen",icon:"🛒",title:"eBay-Anzeigen optimieren",desc:"KI schreibt aus deiner Beschreibung eine verkaufsstarke Anzeige mit den richtigen Suchwörtern.",how:"Schreib der KI: 'Schreib eine eBay-Anzeige f\u00fcr: [Artikel beschreiben]. Preis: X\u20ac.'"},
+  {n:15,cat:"finanzen",icon:"🎄",title:"Weihnachtsbudget planen",desc:"Verteile dein Weihnachtsbudget fair auf alle Personen und behalte den Überblick.",how:"Schreib der KI: 'Ich habe 300\u20ac f\u00fcr Weihnachtsgeschenke. Hier sind alle Personen: [Liste]. Hilf mir verteilen.'"},
+  {n:16,cat:"finanzen",icon:"⚡",title:"Strom & Gas wechseln",desc:"KI erklärt Vertragsklauseln und hilft dir, das Angebot zu verstehen, bevor du wechselst.",how:"Schreib der KI: 'Erkl\u00e4re mir dieses Strom-Angebot und ob es gut ist: [Angebot einf\u00fcgen]'"},
+  {n:17,cat:"finanzen",icon:"🎓",title:"BAföG-Antrag vorbereiten",desc:"Checkliste aller benötigten Unterlagen und Erklärung der Einkommensgrenzen.",how:"Schreib der KI: 'Erstelle eine Checkliste aller Unterlagen f\u00fcr den BAf\u00f6G-Antrag.'"},
+  {n:18,cat:"finanzen",icon:"👶",title:"Elterngeld berechnen",desc:"Lass dir erklären, welches Elterngeld-Modell für eure Familiensituation am günstigsten ist.",how:"Schreib der KI: 'Erkl\u00e4re Elterngeld Plus vs. Basiselterngeld. Wir verdienen je 2.500\u20ac.'"},
+  {n:19,cat:"finanzen",icon:"💎",title:"Finanzielle Ziele visualisieren",desc:"KI hilft dir, vage Träume (\"Haus kaufen\") in konkrete Sparziele mit Zeitplan umzuwandeln.",how:"Schreib der KI: 'Ich tr\u00e4ume davon, ein Haus zu kaufen. Hilf mir das in konkrete Sparziele umzuwandeln.'"},
+  {n:20,cat:"finanzen",icon:"🪙",title:"Krypto einfach erklärt",desc:"Bitcoin, Blockchain & Co. – KI erklärt Schritt für Schritt ohne Vorkenntnisse.",how:"Schreib der KI: 'Erkl\u00e4re mir Bitcoin und Blockchain so einfach wie m\u00f6glich.'"},
+  {n:21,cat:"finanzen",icon:"📬",title:"Kontowechsel begleiten",desc:"Checkliste und Musterbriefe für den reibungslosen Wechsel zu einer neuen Bank.",how:"Schreib der KI: 'Erstelle mir Musterbriefe und eine Checkliste f\u00fcr den Wechsel zu einer neuen Bank.'"},
+  {n:22,cat:"finanzen",icon:"🎁",title:"Schenkungssteuer verstehen",desc:"Ab welchem Betrag wird Schenkungssteuer fällig? KI erklärt Freibeträge und Ausnahmen.",how:"Schreib der KI: 'Erkl\u00e4re mir die Schenkungssteuer-Freibetr\u00e4ge in Deutschland.'"},
+  {n:23,cat:"finanzen",icon:"📜",title:"Erbschaft-Checkliste",desc:"Was muss ich nach einem Todesfall erledigen? KI erstellt eine strukturierte Schritt-für-Schritt-Liste.",how:"Schreib der KI: 'Was muss ich nach dem Tod eines Familienmitglieds alles erledigen? Erstelle eine Liste.'"},
+  {n:24,cat:"finanzen",icon:"🚫",title:"Konsumfallen erkennen",desc:"Erkläre deine Einkaufsgewohnheiten und KI zeigt dir versteckte Kostentreiber auf.",how:"Schreib der KI: 'Ich gebe viel Geld f\u00fcr [Kategorie] aus. Zeig mir meine Konsumfallen und Alternativen.'"},
+  {n:25,cat:"finanzen",icon:"💬",title:"Gehaltsverhandlung vorbereiten",desc:"KI coacht dich mit Argumenten, Zahlen und Formulierungen für das Gehaltsgespräch.",how:"Schreib der KI: 'Coach mich f\u00fcr meine Gehaltsverhandlung. Aktuelle Gehalt: X\u20ac, ich will Y\u20ac. Argumente?'"},
+  {n:26,cat:"finanzen",icon:"🧾",title:"Freelancer-Rechnung erstellen",desc:"KI erstellt eine professionelle Rechnung mit allen Pflichtangaben – einfach Daten eingeben.",how:"Schreib der KI: 'Erstelle eine Rechnung f\u00fcr [Leistung], Netto X\u20ac, 19% MwSt, f\u00fcr Firma Y.'"},
+  {n:27,cat:"finanzen",icon:"🔄",title:"Kfz-Versicherung wechseln",desc:"Erkläre dein Auto und Fahrprofil – KI zeigt dir Einsparpotenziale und worauf du achten musst.",how:"Schreib der KI: 'Erkl\u00e4re mir dieses Kfz-Versicherungsangebot und wo ich sparen k\u00f6nnte.'"},
+  {n:28,cat:"finanzen",icon:"🏦",title:"Depot-Analyse vereinfachen",desc:"Füge deine Positionen ein und erhalte eine verständliche Einschätzung deiner Aufstellung.",how:"Schreib der KI: 'Mein Depot enth\u00e4lt: [Positionen]. Erkl\u00e4re mir wie ich aufgestellt bin.'"},
+  {n:29,cat:"finanzen",icon:"📉",title:"Rezessions-Angst abbauen",desc:"KI erklärt historische Wirtschaftskrisen und zeigt dir, was Privatanleger wirklich tun sollten.",how:"Schreib der KI: 'Erkl\u00e4re mir historische Wirtschaftskrisen und was Privatanleger damals am besten taten.'"},
+  {n:30,cat:"finanzen",icon:"🛡️",title:"Finanzielle Absicherung nach Trennung",desc:"Welche Ansprüche habe ich? KI liefert einen ersten Überblick über Unterhalt und Zugewinn.",how:"Schreib der KI: 'Ich trenne mich. Erkl\u00e4re mir Unterhaltsanspr\u00fcche und Zugewinnausgleich in Deutschland.'"},
+  {n:31,cat:"finanzen",icon:"💼",title:"Businessplan-Finanzteil",desc:"KI hilft beim Erstellen einer vereinfachten Finanzplanung für Gründer und Selbstständige.",how:"Schreib der KI: 'Erstelle einen einfachen Finanzteil f\u00fcr meinen Businessplan. Produkt: [beschreiben].'"},
+  {n:32,cat:"finanzen",icon:"🎰",title:"Lotterie vs. Sparen",desc:"KI rechnet dir vor, was mit dem Lottogeld als Sparrate in 20 Jahren daraus wird.",how:"Schreib der KI: 'Ich spare 50\u20ac im Monat vs. Lotto spielen f\u00fcr 50\u20ac. Was ist nach 20 Jahren mehr wert?'"},
+  {n:33,cat:"finanzen",icon:"🌍",title:"Auslandsüberweisung verstehen",desc:"Gebühren, Wechselkurse und Alternativen – KI erklärt den günstigsten Weg.",how:"Schreib der KI: 'Erkl\u00e4re mir den g\u00fcnstigsten Weg, 500\u20ac nach [Land] zu \u00fcberweisen.'"},
+  {n:34,cat:"finanzen",icon:"📱",title:"Finanz-Apps erklären lassen",desc:"Was ist der Unterschied zwischen YNAB, Finanzguru & Co.? KI empfiehlt die passende App.",how:"Schreib der KI: 'Was ist der Unterschied zwischen YNAB und Finanzguru? Welche App passt besser zu mir?'"},
+  {n:35,cat:"finanzen",icon:"🔑",title:"Immobilien-Finanzierung verstehen",desc:"Zinsen, Tilgung, Eigenkapital – KI erklärt den Hauskauf-Finanzierungsdschungel Schritt für Schritt.",how:"Schreib der KI: 'Erkl\u00e4re mir Zinsen, Tilgung und Eigenkapital beim Hauskauf mit einem Rechenbeispiel.'"},
+
+  // 🏡 HAUS & GARTEN (35)
+  {n:36,cat:"haus",icon:"🔨",title:"Renovierungsplan erstellen",desc:"Beschreibe dein Projekt und erhalte einen realistischen Zeitplan mit Kostenschätzung und Reihenfolge.",how:"Schreib der KI: 'Erstelle einen Renovierungsplan f\u00fcr [Raum beschreiben] mit Zeitplan und Kostensch\u00e4tzung.'"},
+  {n:37,cat:"haus",icon:"🎨",title:"Farbkonzept fürs Wohnzimmer",desc:"KI schlägt harmonische Farbkombinationen vor – abgestimmt auf Möbel und Lichteinfall.",how:"Schreib der KI: 'Schlage mir Farbkombinationen f\u00fcr ein Wohnzimmer mit braunem Sofa und Eichenboden vor.'"},
+  {n:38,cat:"haus",icon:"🌿",title:"Pflanzen bestimmen",desc:"Beschreibe Blätter, Blüten und Wuchsform – KI hilft bei der Pflanzenbestimmung und Pflege.",how:"Schreib der KI: 'Ich habe eine Pflanze mit [Beschreibung]. Was k\u00f6nnte das sein und wie pflege ich sie?'"},
+  {n:39,cat:"haus",icon:"🥕",title:"Gemüsegarten-Jahresplan",desc:"Wann säe ich was aus? KI erstellt einen monatlichen Aussaat- und Erntekalender für deinen Garten.",how:"Schreib der KI: 'Erstelle einen Aussaat- und Erntekalender f\u00fcr meinen Gem\u00fcsegarten in Deutschland.'"},
+  {n:40,cat:"haus",icon:"🐛",title:"Schädlinge diagnostizieren",desc:"Beschreibe das Problem an Pflanzen oder im Haus – KI liefert Ursache und Behandlung.",how:"Schreib der KI: 'Meine Pflanze hat [Symptome]. Was ist der Sch\u00e4dling und wie bek\u00e4mpfe ich ihn?'"},
+  {n:41,cat:"haus",icon:"📦",title:"Umzugs-Checkliste",desc:"KI erstellt eine vollständige, zeitliche Umzugsplanung – von 8 Wochen vorher bis zum Einzugstag.",how:"Schreib der KI: 'Erstelle eine vollst\u00e4ndige Umzugs-Checkliste, Einzug in 6 Wochen.'"},
+  {n:42,cat:"haus",icon:"🪛",title:"Aufbauanleitung vereinfachen",desc:"Fotografiere oder beschreibe verwirrende IKEA-Anleitungen – KI erklärt Schritt für Schritt.",how:"Schreib der KI: 'Erkl\u00e4re mir Schritt f\u00fcr Schritt diese M\u00f6bel-Aufbauanleitung: [Schritte beschreiben]'"},
+  {n:43,cat:"haus",icon:"👷",title:"Handwerker-Angebote vergleichen",desc:"KI hilft dir, Angebote zu verstehen und die richtigen Fragen an Handwerker zu stellen.",how:"Schreib der KI: 'Hier sind 2 Handwerker-Angebote: [einf\u00fcgen]. Erkl\u00e4re mir den Unterschied.'"},
+  {n:44,cat:"haus",icon:"💡",title:"Energiespar-Tipps",desc:"Beschreibe dein Haus und deine Gewohnheiten – KI findet die 5 größten Einsparmöglichkeiten.",how:"Schreib der KI: 'Mein Haus ist [Baujahr, Heizung, Quadratmeter]. Wo kann ich am meisten Energie sparen?'"},
+  {n:45,cat:"haus",icon:"🌡️",title:"Heizkostenoptimierung",desc:"Wann heizen, wie lüften, welche Temperatur wo? KI erstellt deinen persönlichen Heizplan.",how:"Schreib der KI: 'Erstelle einen Heizplan f\u00fcr mein Haus: Welche Temperaturen wann in welchen R\u00e4umen?'"},
+  {n:46,cat:"haus",icon:"💧",title:"Garten-Bewässerungsplan",desc:"Welche Pflanzen brauchen wie viel Wasser? KI erstellt einen effizienten Bewässerungsplan.",how:"Schreib der KI: 'Erstelle einen Bew\u00e4sserungsplan f\u00fcr meinen Garten: [Pflanzen auflisten]'"},
+  {n:47,cat:"haus",icon:"🌸",title:"Blumenbeet gestalten",desc:"Farben, Blütezeiten, Höhen – KI plant ein Beet, das von Frühjahr bis Herbst blüht.",how:"Schreib der KI: 'Plane ein Blumenbeet, das von April bis Oktober bl\u00fcht. Gr\u00f6\u00dfe: 2x3 Meter, sonnig.'"},
+  {n:48,cat:"haus",icon:"🧹",title:"Frühjahrsputz-Liste",desc:"Raumweiser, systematischer Putzplan für den großen Jahresputz – nichts wird vergessen.",how:"Schreib der KI: 'Erstelle einen Fr\u00fchjahrsputz-Plan f\u00fcr eine 4-Zimmer-Wohnung mit Priorit\u00e4ten.'"},
+  {n:49,cat:"haus",icon:"♻️",title:"Kompostierung starten",desc:"Was kommt rein, was nicht? KI erklärt Schritt für Schritt, wie Kompost funktioniert.",how:"Schreib der KI: 'Erkl\u00e4re mir wie Kompostierung funktioniert und was ich reintun darf und was nicht.'"},
+  {n:50,cat:"haus",icon:"✂️",title:"Hecke & Bäume schneiden",desc:"Wann ist der beste Zeitpunkt für welchen Schnitt? KI gibt Schnitt-Kalender und Anleitung.",how:"Schreib der KI: 'Wann und wie soll ich [Heckenpflanze] schneiden? Erstelle einen Jahreskalender.'"},
+  {n:51,cat:"haus",icon:"💦",title:"Feuchtigkeitsproblem im Keller",desc:"Beschreibe das Problem – KI analysiert mögliche Ursachen und Lösungsansätze.",how:"Schreib der KI: 'Mein Keller ist feucht. Symptome: [beschreiben]. Was k\u00f6nnten die Ursachen sein?'"},
+  {n:52,cat:"haus",icon:"🍳",title:"Traumküche planen",desc:"KI hilft beim Grundriss, der Auswahl von Geräten und der Küchenplanung nach Budget.",how:"Schreib der KI: 'Hilf mir meine Traumk\u00fcche zu planen. Grundriss: L-Form, 4x3m, Budget 8.000\u20ac.'"},
+  {n:53,cat:"haus",icon:"🛁",title:"Badezimmer renovieren",desc:"Schritt-für-Schritt-Plan für die Bad-Renovation inklusive Materialauswahl und Kostenschätzung.",how:"Schreib der KI: 'Erstelle einen Schritt-f\u00fcr-Schritt-Renovierungsplan f\u00fcr mein Bad. Budget: X\u20ac.'"},
+  {n:54,cat:"haus",icon:"🧸",title:"Kinderzimmer einrichten",desc:"Altersgerechte Einrichtungsideen, sichere Materialien und platzsparende Lösungen.",how:"Schreib der KI: 'Richte ein Kinderzimmer f\u00fcr ein 4-j\u00e4hriges Kind ein. Budget: 500\u20ac, 12qm.'"},
+  {n:55,cat:"haus",icon:"💻",title:"Home-Office optimal gestalten",desc:"Ergonomie, Beleuchtung, Akustik – KI entwirft dein ideales Heimarbeitszimmer.",how:"Schreib der KI: 'Optimiere mein Home-Office: Tisch, Stuhl, Monitor. Was muss ich auf Ergonomie achten?'"},
+  {n:56,cat:"haus",icon:"🌿",title:"Wintergarten planen",desc:"Bauvoraussetzungen, Materialien und Nutzungsideen für deinen Traumwintergarten.",how:"Schreib der KI: 'Was muss ich bei einem Wintergarten-Anbau beachten? Genehmigung, Kosten, Materialien?'"},
+  {n:57,cat:"haus",icon:"🪴",title:"Terrasse aufwerten",desc:"KI gibt Ideen für Bepflanzung, Beleuchtung und Möbel – abgestimmt auf Budget und Stil.",how:"Schreib der KI: 'Gib mir 10 Ideen, wie ich meine Terrasse mit 200\u20ac aufwerten kann.'"},
+  {n:58,cat:"haus",icon:"🥩",title:"Grillparty perfekt planen",desc:"Mengenberechnung, Reihenfolge beim Grillen, Beilagen – KI plant deine Grillparty durch.",how:"Schreib der KI: 'Plane eine Grillparty f\u00fcr 15 Personen: Men\u00fc, Mengen, Reihenfolge beim Grillen.'"},
+  {n:59,cat:"haus",icon:"📄",title:"Mietvertrag prüfen",desc:"KI erklärt unklare Klauseln und weist auf potenziell unwirksame Regelungen hin.",how:"Schreib der KI: 'Erkl\u00e4re mir diese Klauseln in meinem Mietvertrag: [Klauseln einf\u00fcgen]'"},
+  {n:60,cat:"haus",icon:"🏠",title:"Hauskauf-Checkliste",desc:"Was muss ich beim Hauskauf beachten? KI erstellt eine umfassende Besichtigungs-Checkliste.",how:"Schreib der KI: 'Erstelle eine Besichtigungs-Checkliste f\u00fcr den Hauskauf.'"},
+  {n:61,cat:"haus",icon:"🌞",title:"Solaranlage bewerten",desc:"Lohnt sich PV für mein Dach? KI erklärt Ertrag, Kosten und Amortisation verständlich.",how:"Schreib der KI: 'Erkl\u00e4re mir wie eine Solaranlage f\u00fcr ein Einfamilienhaus funktioniert und was sie kostet.'"},
+  {n:62,cat:"haus",icon:"🌧️",title:"Regenwasser nutzen",desc:"Wie sammle ich Regenwasser und wofür kann ich es nutzen? Planung und Behördenanforderungen.",how:"Schreib der KI: 'Wie kann ich Regenwasser in meinem Garten nutzen? Was brauche ich daf\u00fcr?'"},
+  {n:63,cat:"haus",icon:"🔒",title:"Einbruchschutz verbessern",desc:"KI prüft dein Zuhause auf Schwachstellen und empfiehlt günstige Sicherheitslösungen.",how:"Schreib der KI: 'Pr\u00fcfe mein Haus auf Einbruchschwachstellen: [T\u00fcren, Fenster, Lage beschreiben]'"},
+  {n:64,cat:"haus",icon:"🪟",title:"Fenster dämmen",desc:"Wärmebrücken finden und mit einfachen Mitteln Energie sparen – KI erklärt wie.",how:"Schreib der KI: 'Wie kann ich Fenster g\u00fcnstig d\u00e4mmen und was bringt das finanziell?'"},
+  {n:65,cat:"haus",icon:"🏡",title:"Wohnungsübergabe vorbereiten",desc:"Protokoll-Checkliste und typische Streitpunkte bei Ein- und Auszug kennen.",how:"Schreib der KI: 'Erstelle ein Wohnungs\u00fcbergabe-Protokoll und erkl\u00e4re typische Streitpunkte.'"},
+  {n:66,cat:"haus",icon:"🧺",title:"Waschküchen-Chaos ordnen",desc:"KI erstellt ein Wäschepflege-System, das zur Familie passt – keine Berge mehr.",how:"Schreib der KI: 'Hilf mir ein W\u00e4schepflege-System f\u00fcr eine 4-k\u00f6pfige Familie zu entwickeln.'"},
+  {n:67,cat:"haus",icon:"🌱",title:"Balkon begrünen",desc:"Welche Pflanzen gedeihen auf welchem Balkon? KI plant Bepflanzung nach Himmelsrichtung.",how:"Schreib der KI: 'Welche Pflanzen eignen sich f\u00fcr einen [Richtung] ausgerichteten Balkon?'"},
+  {n:68,cat:"haus",icon:"🔧",title:"Heizung entlüften",desc:"KI erklärt Schritt für Schritt, wie man Heizkörper entlüftet und wann es nötig ist.",how:"Schreib der KI: 'Erkl\u00e4re mir Schritt f\u00fcr Schritt, wie ich Heizk\u00f6rper entl\u00fcfte.'"},
+  {n:69,cat:"haus",icon:"📐",title:"Tapezier-Mengen berechnen",desc:"Raumgröße eingeben – KI berechnet Tapeten-Bedarf, Klebermenge und gibt Tipps.",how:"Schreib der KI: 'Berechne den Tapetenbedarf f\u00fcr ein Zimmer: 4x5m, 2,5m H\u00f6he, 1 T\u00fcr, 1 Fenster.'"},
+  {n:70,cat:"haus",icon:"🌻",title:"Wildbienenfreundlich gärtnern",desc:"Welche Pflanzen und Strukturen helfen Bienen? KI plant deinen bienenfreundlichen Garten.",how:"Schreib der KI: 'Welche Pflanzen und Strukturen machen meinen Garten bienenfreundlich?'"},
+
+  // 🚗 AUTO & MOBILITÄT (25)
+  {n:71,cat:"auto",icon:"🚗",title:"Gebrauchtwagen-Kauf beraten",desc:"Beschreibe das Fahrzeug – KI prüft Preis, typische Mängel und worauf du bei der Besichtigung achten solltest.",how:"Schreib der KI: 'Ich m\u00f6chte diesen Gebrauchtwagen kaufen: [Daten]. Was soll ich bei der Besichtigung pr\u00fcfen?'"},
+  {n:72,cat:"auto",icon:"🛡️",title:"KFZ-Versicherung optimieren",desc:"KI erklärt Unterschiede zwischen Tarifen und hilft dir, die richtige Deckung zu wählen.",how:"Schreib der KI: 'Erkl\u00e4re mir den Unterschied zwischen Haftpflicht, Teilkasko und Vollkasko.'"},
+  {n:73,cat:"auto",icon:"🔧",title:"Pannenhilfe-Anleitung",desc:"Reifenpanne, leere Batterie, überhitzter Motor – KI führt dich sicher durch jede Situation.",how:"Schreib der KI: 'Ich habe eine Reifenpanne. Erkl\u00e4re mir Schritt f\u00fcr Schritt was ich jetzt tun muss.'"},
+  {n:74,cat:"auto",icon:"🔄",title:"Reifenwechsel Schritt für Schritt",desc:"Wann umrüsten, wie wechseln, worauf achten? Alles erklärt ohne Werkstatt-Latein.",how:"Schreib der KI: 'Erkl\u00e4re mir Schritt f\u00fcr Schritt wie ich Winterreifen aufziehe.'"},
+  {n:75,cat:"auto",icon:"📄",title:"Unfallbericht verfassen",desc:"KI hilft dir, einen korrekten, lückenlosen Unfallbericht für die Versicherung zu schreiben.",how:"Schreib der KI: 'Hilf mir einen vollst\u00e4ndigen Unfallbericht f\u00fcr die Versicherung zu schreiben.'"},
+  {n:76,cat:"auto",icon:"⚡",title:"Elektroauto-Umstieg planen",desc:"Reichweite, Ladeinfrastruktur, Kosten – KI vergleicht dein aktuelles Auto mit E-Alternativen.",how:"Schreib der KI: 'Vergleiche mein Benzin-Auto [Modell] mit einem \u00e4hnlichen E-Auto. Kosten nach 5 Jahren?'"},
+  {n:77,cat:"auto",icon:"🔌",title:"Ladestation für E-Auto",desc:"Welche Wallbox passt zu mir? Installation, Kosten und Förderungen erklärt.",how:"Schreib der KI: 'Welche Wallbox brauche ich f\u00fcr mein E-Auto? Budget: 1.500\u20ac, Eigenheim.'"},
+  {n:78,cat:"auto",icon:"🔍",title:"HU/TÜV vorbereiten",desc:"Checkliste aller Punkte, die du vor der Hauptuntersuchung selbst prüfen kannst.",how:"Schreib der KI: 'Erstelle eine Checkliste aller Punkte die ich vor dem T\u00dcV selbst pr\u00fcfen kann.'"},
+  {n:79,cat:"auto",icon:"🗺️",title:"Reiseroute mit Stops planen",desc:"KI plant deine Autoreise mit Pausen, Sehenswürdigkeiten und Mautstrecken.",how:"Schreib der KI: 'Plane meine Autoroute von [Start] nach [Ziel] mit Pausen alle 2 Stunden.'"},
+  {n:80,cat:"auto",icon:"🏎️",title:"Auto verkaufen – Anzeige schreiben",desc:"KI erstellt eine überzeugende Verkaufsanzeige mit allen wichtigen Daten.",how:"Schreib der KI: 'Schreibe eine Verkaufsanzeige f\u00fcr mein Auto: [Marke, Baujahr, km, Zustand].'"},
+  {n:81,cat:"auto",icon:"⛽",title:"Carsharing vs. eigenes Auto",desc:"KI rechnet durch, ab welchem Nutzungsverhalten Carsharing günstiger ist.",how:"Schreib der KI: 'Ich fahre ca. 800km/Monat. Ab wann lohnt sich Carsharing mehr als ein eigenes Auto?'"},
+  {n:82,cat:"auto",icon:"🛣️",title:"Autobahnbaustellen umgehen",desc:"KI kennt Alternativrouten und gibt Tipps zur besten Reisezeit.",how:"Schreib der KI: 'Welche Alternativroute gibt es zu [Strecke] bei Stau oder Baustellen?'"},
+  {n:83,cat:"auto",icon:"🧒",title:"Kindersitz auswählen",desc:"Welche Gruppe brauche ich für mein Kind? KI erklärt i-Size, Gruppen und Einbau.",how:"Schreib der KI: 'Welcher Kindersitz ist richtig f\u00fcr ein Kind mit [Gewicht/Alter]? Erkl\u00e4re i-Size.'"},
+  {n:84,cat:"auto",icon:"🚲",title:"Fahrrad warten & reparieren",desc:"Kettenpflege, Bremsen einstellen, Reifenwechsel – KI erklärt es verständlich.",how:"Schreib der KI: 'Erkl\u00e4re mir wie ich die Bremsen an meinem Fahrrad selbst einstelle.'"},
+  {n:85,cat:"auto",icon:"🚌",title:"ÖPNV-Ticket optimieren",desc:"Welches Abo lohnt sich? KI vergleicht Monats-, Jahres- und 9-Euro-Ticket-Nachfolger.",how:"Schreib der KI: 'Ich fahre t\u00e4glich [Route]. Welches \u00d6PNV-Ticket oder Abo ist am g\u00fcnstigsten?'"},
+  {n:86,cat:"auto",icon:"🛵",title:"Motorrad Saisonstart",desc:"Checkliste für den sicheren Saisonstart nach dem Winter – KI führt durch die Inspektion.",how:"Schreib der KI: 'Erstelle eine Checkliste f\u00fcr den Motorrad-Saisonstart nach dem Winter.'"},
+  {n:87,cat:"auto",icon:"📋",title:"Fahrtenbuch-Vorlagen",desc:"KI erklärt, was ein steuerlich anerkanntes Fahrtenbuch braucht und hilft bei der Vorlage.",how:"Schreib der KI: 'Erkl\u00e4re mir was in ein steuerlich anerkanntes Fahrtenbuch muss. Erstelle eine Vorlage.'"},
+  {n:88,cat:"auto",icon:"🔩",title:"Werkstatt-Angebot verstehen",desc:"KI übersetzt Werkstatt-Kürzel und -Fachbegriffe in verständliche Sprache.",how:"Schreib der KI: 'Meine Werkstatt sagt ich brauche: [Positionen]. Erkl\u00e4re was das bedeutet.'"},
+  {n:89,cat:"auto",icon:"🧴",title:"Motoröl-Sorte bestimmen",desc:"Gib Fahrzeugdaten ein – KI nennt das richtige Öl und erklärt Viskositätswerte.",how:"Schreib der KI: 'Mein Auto ist [Marke/Modell/Jahr]. Welches Motor\u00f6l brauche ich genau?'"},
+  {n:90,cat:"auto",icon:"🚗",title:"Mitfahrgelegenheit-Anzeige",desc:"KI schreibt eine freundliche, ansprechende Mitfahranzeige für BlaBlaCar & Co.",how:"Schreib der KI: 'Schreibe eine freundliche BlaBlaCar-Anzeige f\u00fcr die Strecke [A] nach [B].'"},
+  {n:91,cat:"auto",icon:"🎓",title:"Fahrstunde nachbereiten",desc:"Übe Theoriefragen mit der KI als Coach – Erklärungen statt nur Antworten.",how:"Schreib der KI: 'Stelle mir 10 typische F\u00fchrerschein-Theoriefragen zu [Thema] und erkl\u00e4re die Antworten.'"},
+  {n:92,cat:"auto",icon:"💰",title:"Dienstwagen-Besteuerung",desc:"1%-Regel vs. Fahrtenbuch – KI rechnet durch, was in deiner Situation günstiger ist.",how:"Schreib der KI: '1%-Regel oder Fahrtenbuch \u2013 was ist g\u00fcnstiger f\u00fcr mich? Privatanteil: ca. 30%.'"},
+  {n:93,cat:"auto",icon:"🌍",title:"Urlaub mit dem Auto im Ausland",desc:"Vignetten, Verbotszonen, Versicherungen – KI erstellt eine Länder-Checkliste.",how:"Schreib der KI: 'Erstelle eine Checkliste f\u00fcr Autofahren in [Land]: Vignette, Ausr\u00fcstung, Regeln.'"},
+  {n:94,cat:"auto",icon:"🚐",title:"Wohnmobil mieten & planen",desc:"Erstbuchung eines Wohnmobils? KI erklärt alles von der Auswahl bis zur Route.",how:"Schreib der KI: 'Ich miete zum ersten Mal ein Wohnmobil. Was muss ich alles wissen und beachten?'"},
+  {n:95,cat:"auto",icon:"🔋",title:"Autobatterie prüfen & wechseln",desc:"Symptome einer schwachen Batterie erkennen und beim Wechsel nichts falsch machen.",how:"Schreib der KI: 'Mein Auto springt schlecht an. Ist das die Batterie? Wie pr\u00fcfe und tausche ich sie?'"},
+
+  // ✈️ URLAUB & FREIZEIT (35)
+  {n:96,cat:"urlaub",icon:"🗺️",title:"Städtereise in 48h planen",desc:"Gib die Stadt an – KI erstellt ein optimiertes 2-Tage-Programm mit Highlights und Geheimtipps.",how:"Schreib der KI: 'Plane mir ein 48-Stunden-Programm f\u00fcr [Stadt] \u2013 Highlights und Geheimtipps.'"},
+  {n:97,cat:"urlaub",icon:"🧳",title:"Packliste für Fernreise",desc:"Destination, Dauer, Aktivitäten eingeben – KI erstellt die perfekte Packliste ohne Vergessenes.",how:"Schreib der KI: 'Erstelle eine Packliste f\u00fcr 2 Wochen [Destination] im [Monat] f\u00fcr [Aktivit\u00e4ten].'"},
+  {n:98,cat:"urlaub",icon:"🛡️",title:"Reiseversicherung erklären",desc:"KI erklärt den Unterschied zwischen Kranken-, Rücktritts- und Gepäckversicherung.",how:"Schreib der KI: 'Erkl\u00e4re mir den Unterschied zwischen Reiser\u00fccktritts- und Reisekrankenversicherung.'"},
+  {n:99,cat:"urlaub",icon:"⭐",title:"Hotel-Bewertungen zusammenfassen",desc:"Füge viele Bewertungen ein – KI fasst Vor- und Nachteile in 5 Punkten zusammen.",how:"Schreib der KI: 'Fasse diese Hotel-Bewertungen zusammen und nenn mir 3 Vor- und Nachteile: [einf\u00fcgen]'"},
+  {n:100,cat:"urlaub",icon:"🍽️",title:"Restaurantempfehlungen vor Ort",desc:"Wo essen die Einheimischen? KI kennt die besten Tipps abseits der Touristenfallen.",how:"Schreib der KI: 'Empfehle mir Restaurants in [Stadt] die Einheimische w\u00e4hlen w\u00fcrden, nicht Touristen.'"},
+  {n:101,cat:"urlaub",icon:"💶",title:"Reisebudget aufstellen",desc:"KI plant dein Reisebudget nach Unterkunft, Essen, Aktivitäten und Puffern.",how:"Schreib der KI: 'Erstelle ein Reisebudget f\u00fcr [Ziel], [Dauer], [Reisende Personen].'"},
+  {n:102,cat:"urlaub",icon:"📋",title:"Visum-Anforderungen checken",desc:"Brauchst du ein Visum? KI erklärt Anforderungen und Links zu den richtigen Stellen.",how:"Schreib der KI: 'Brauche ich als Deutscher ein Visum f\u00fcr [Land]? Was sind die Anforderungen?'"},
+  {n:103,cat:"urlaub",icon:"💉",title:"Impfempfehlungen recherchieren",desc:"KI gibt einen Überblick empfohlener Reiseimpfungen – Arzt-Besuch natürlich trotzdem nötig.",how:"Schreib der KI: 'Welche Impfungen werden f\u00fcr eine Reise nach [Land] empfohlen?'"},
+  {n:104,cat:"urlaub",icon:"🥾",title:"Wanderroute planen",desc:"Region und Fitness-Level eingeben – KI empfiehlt passende Wanderungen mit Schwierigkeitsgrad.",how:"Schreib der KI: 'Empfehle mir eine Wanderroute in [Region] f\u00fcr [Fitnesslevel]. Ca. [Stunden] pro Tag.'"},
+  {n:105,cat:"urlaub",icon:"⛺",title:"Campingurlaub vorbereiten",desc:"Ausrüstungsliste, Campingregeln und Tipps für Einsteiger – alles von KI zusammengestellt.",how:"Schreib der KI: 'Ich mache meinen ersten Campingurlaub. Erstelle mir eine Ausr\u00fcstungsliste.'"},
+  {n:106,cat:"urlaub",icon:"🚢",title:"Kreuzfahrt-Ausflüge planen",desc:"KI hilft dir, Landausflüge zu priorisieren und günstigere Alternativen zu Bordbuchungen zu finden.",how:"Schreib der KI: 'Ich bin auf einer Kreuzfahrt in [H\u00e4fen]. Welche Ausfl\u00fcge sind wirklich empfehlenswert?'"},
+  {n:107,cat:"urlaub",icon:"🗣️",title:"Sprachführer erstellen",desc:"KI erstellt einen personalisierten Sprachführer mit den wichtigsten Phrasen für dein Reiseziel.",how:"Schreib der KI: 'Erstelle einen Sprachf\u00fchrer f\u00fcr [Land] mit 30 wichtigen Phrasen f\u00fcr Touristen.'"},
+  {n:108,cat:"urlaub",icon:"📖",title:"Reisetagebuch führen",desc:"Erzähle KI deinen Tag – sie formt daraus einen schönen, lesenswerten Tagebucheintrag.",how:"Schreib der KI: 'Schreib aus diesen Notizen einen sch\u00f6nen Reisetagebuch-Eintrag: [Stichpunkte]'"},
+  {n:109,cat:"urlaub",icon:"📸",title:"Urlaubsfotos beschriften",desc:"KI erstellt Bildunterschriften, Instagram-Texte oder Fotobuch-Texte aus deinen Beschreibungen.",how:"Schreib der KI: 'Schreibe Instagram-Texte f\u00fcr meine Fotos aus [Reiseziel].'"},
+  {n:110,cat:"urlaub",icon:"✈️",title:"Flugsuche-Strategie",desc:"Wann buchen? KI erklärt Buchungszeitpunkte, Preisalerts und günstige Reisetage.",how:"Schreib der KI: 'Wann ist die g\u00fcnstigste Zeit, Fl\u00fcge nach [Ziel] zu buchen? Tipps f\u00fcr Schn\u00e4ppchen?'"},
+  {n:111,cat:"urlaub",icon:"🏠",title:"Airbnb-Listing verstehen",desc:"KI liest Bewertungen und Hausregeln kritisch durch und hebt wichtige Details hervor.",how:"Schreib der KI: 'Lies diese Airbnb-Hausregeln und sage mir was wichtig ist: [Text einf\u00fcgen]'"},
+  {n:112,cat:"urlaub",icon:"👧",title:"Kinder-Aktivitäten vor Ort",desc:"Reiseziel und Kindheralter eingeben – KI findet altersgerechte Aktivitäten und Events.",how:"Schreib der KI: 'Ich reise mit Kindern (Alter: X, Y) nach [Ziel]. Welche Aktivit\u00e4ten eignen sich?'"},
+  {n:113,cat:"urlaub",icon:"🌧️",title:"Regentag-Alternativen planen",desc:"Schlechtwetter-Notfallplan für jede Destination – KI kennt die besten Indoor-Tipps.",how:"Schreib der KI: 'Was kann ich an einem Regentag in [Stadt/Region] mit Kindern unternehmen?'"},
+  {n:114,cat:"urlaub",icon:"🙏",title:"Kulturelle Do's und Don'ts",desc:"Was ist höflich, was ist ein Fauxpas? KI erklärt die wichtigsten Kulturregeln deines Reiselands.",how:"Schreib der KI: 'Was sind die wichtigsten kulturellen Regeln und Tabus in [Land]?'"},
+  {n:115,cat:"urlaub",icon:"🆘",title:"Notfallnummern im Ausland",desc:"KI liefert die wichtigsten Notfall- und Botschaftsnummern für dein Reiseland.",how:"Schreib der KI: 'Welche Notfallnummern und Botschaftsdaten brauche ich f\u00fcr [Land]?'"},
+  {n:116,cat:"urlaub",icon:"⚖️",title:"Gepäck-Gewicht optimieren",desc:"Kleidungsplan eingeben – KI schlägt vor, was du weglassen kannst und was Mehrnutzen bringt.",how:"Schreib der KI: 'Ich darf nur 23kg aufgeben. \u00dcberpr\u00fcfe meine Packliste auf \u00dcberfl\u00fcssiges: [Liste]'"},
+  {n:117,cat:"urlaub",icon:"🚐",title:"Roadtrip planen",desc:"Start, Ziel und Interessen eingeben – KI plant die perfekte Roadtrip-Route mit Stopps.",how:"Schreib der KI: 'Plane einen Roadtrip von [A] nach [B] mit 5 \u00dcbernachtungen und Sehensw\u00fcrdigkeiten.'"},
+  {n:118,cat:"urlaub",icon:"🎵",title:"Roadtrip-Playlist erstellen",desc:"KI erstellt Playlist-Vorschläge nach Stimmung und Reiseregion.",how:"Schreib der KI: 'Erstelle Playlist-Ideen f\u00fcr einen Roadtrip durch [Region/Land].'"},
+  {n:119,cat:"urlaub",icon:"🏛️",title:"Stadtführer selbst erstellen",desc:"KI schreibt dir einen personalisierten Stadtführer nach deinen Interessen.",how:"Schreib der KI: 'Schreibe mir einen personalisierten Stadtf\u00fchrer f\u00fcr [Stadt] \u2013 ich mag: [Interessen].'"},
+  {n:120,cat:"urlaub",icon:"📷",title:"Fotografier-Tipps für den Urlaub",desc:"Besondere Orte fotografieren wie ein Profi – KI gibt Kompositions- und Lichttipps.",how:"Schreib der KI: 'Gib mir Tipps f\u00fcr Urlaubsfotos in [Ort] \u2013 beste Zeiten, Orte, Kompositionstipps.'"},
+  {n:121,cat:"urlaub",icon:"🎡",title:"Freizeitpark-Besuch optimieren",desc:"Welche Attraktionen zuerst? KI plant den Tagesablauf für minimale Wartezeiten.",how:"Schreib der KI: 'Ich besuche [Freizeitpark]. Welche Attraktionen soll ich zuerst machen?'"},
+  {n:122,cat:"urlaub",icon:"🎟️",title:"Konzert & Events clever kaufen",desc:"Wann werden Tickets günstiger? KI erklärt Strategien für Ticket-Käufe.",how:"Schreib der KI: 'Wie kaufe ich g\u00fcnstig Tickets f\u00fcr [Event/Konzert]? Gibt es Strategien?'"},
+  {n:123,cat:"urlaub",icon:"🖼️",title:"Museumsbesuch vorbereiten",desc:"KI gibt einen Überblick über die Highlights und empfiehlt die beste Reihenfolge.",how:"Schreib der KI: 'Ich besuche [Museum]. Bereite mich vor: Was sind die Must-Sees?'"},
+  {n:124,cat:"urlaub",icon:"📚",title:"Reisebuch schreiben",desc:"KI hilft dir, aus Fotos und Notizen ein persönliches Reisebuch zu gestalten.",how:"Schreib der KI: 'Hilf mir aus meinen Reisenotizen ein pers\u00f6nliches Reisebuch zu strukturieren.'"},
+  {n:125,cat:"urlaub",icon:"🏔️",title:"Skiurlaub planen",desc:"Skigebiet, Unterkunft, Ausrüstung, Pisten – KI erstellt deinen kompletten Skiurlaubs-Guide.",how:"Schreib der KI: 'Plane meinen Skiurlaub in [Region] f\u00fcr [Niveau, Tage, Budget].'"},
+  {n:126,cat:"urlaub",icon:"🌊",title:"Strandurlaub optimieren",desc:"Welcher Strand passt zu uns? KI empfiehlt nach Präferenzen (ruhig, familiär, Wassersport).",how:"Schreib der KI: 'Welcher Strand in [Land/Region] passt zu uns? Wir m\u00f6gen: [Vorlieben].'"},
+  {n:127,cat:"urlaub",icon:"☀️",title:"Sommerferien-Programm für Kinder",desc:"KI erstellt ein abwechslungsreiches 6-Wochen-Programm – auch für schlechte Tage.",how:"Schreib der KI: 'Erstelle ein 6-Wochen-Sommerprogramm f\u00fcr Kinder im Alter von [X] und [Y].'"},
+  {n:128,cat:"urlaub",icon:"🧘",title:"Wellness-Reise planen",desc:"Kurse, Anwendungen, Ernährung – KI plant deinen persönlichen Erholungsurlaub.",how:"Schreib der KI: 'Plane mir einen Wellness-Kurzurlaub f\u00fcr 3 Tage in [Region]. Budget: X\u20ac.'"},
+  {n:129,cat:"urlaub",icon:"🌴",title:"Fernreise-Erstplanung",desc:"Noch nie weit gereist? KI führt dich durch alles – von Impfungen bis Stromsteckern.",how:"Schreib der KI: 'Ich mache meine erste Fernreise nach [Land]. Was muss ich alles vorbereiten?'"},
+  {n:130,cat:"urlaub",icon:"🎯",title:"Last-Minute-Reise finden",desc:"KI gibt Ideen für spontane Reiseziele und erklärt, wie man Last-Minute-Deals findet.",how:"Schreib der KI: 'Ich habe [Datum] frei und [Budget]. \u00dcberrasch mich mit Last-Minute-Reiseideen.'"},
+
+  // 💼 JOB & KARRIERE (35)
+  {n:131,cat:"job",icon:"✉️",title:"Bewerbungsschreiben optimieren",desc:"Füge dein Anschreiben ein – KI gibt konkretes Feedback und eine verbesserte Version.",how:"Schreib der KI: 'Hier ist mein Anschreiben: [einf\u00fcgen]. Gib mir konkretes Feedback und verbessere es.'"},
+  {n:132,cat:"job",icon:"📋",title:"Lebenslauf prüfen",desc:"KI analysiert deinen CV auf Lücken, Formulierungen und ATS-Tauglichkeit.",how:"Schreib der KI: 'Pr\u00fcfe meinen Lebenslauf auf L\u00fccken und Optimierungspotenzial: [CV einf\u00fcgen]'"},
+  {n:133,cat:"job",icon:"🎭",title:"Vorstellungsgespräch simulieren",desc:"KI spielt den Interviewer – stelle typische Fragen und erhalte sofort Feedback.",how:"Schreib der KI: 'F\u00fchre mit mir ein Vorstellungsgespr\u00e4ch f\u00fcr die Stelle: [Stellenbeschreibung einf\u00fcgen]'"},
+  {n:134,cat:"job",icon:"💰",title:"Gehaltsverhandlung üben",desc:"KI trainiert dich mit Einwänden und Zahlen für dein nächstes Gehaltsgespräch.",how:"Schreib der KI: 'Spiel meinen Chef. Ich will eine Gehaltserh\u00f6hung von X\u20ac auf Y\u20ac. Ich \u00fcbe jetzt.'"},
+  {n:135,cat:"job",icon:"🔗",title:"LinkedIn-Profil verbessern",desc:"KI analysiert dein Profil und gibt Tipps für mehr Sichtbarkeit und Anfragen.",how:"Schreib der KI: 'Hier ist mein LinkedIn-Profil: [einf\u00fcgen]. Was soll ich verbessern?'"},
+  {n:136,cat:"job",icon:"📊",title:"Präsentation strukturieren",desc:"Thema und Ziel eingeben – KI entwirft eine klare Struktur mit Dramaturgie.",how:"Schreib der KI: 'Strukturiere meine Pr\u00e4sentation zu [Thema] f\u00fcr [Zielgruppe, Dauer].'"},
+  {n:137,cat:"job",icon:"📧",title:"E-Mails professionell schreiben",desc:"Schwierige E-Mails? KI findet den richtigen Ton – höflich, klar, professionell.",how:"Schreib der KI: 'Schreibe diese E-Mail professioneller und freundlicher: [E-Mail einf\u00fcgen]'"},
+  {n:138,cat:"job",icon:"📝",title:"Meeting-Protokoll erstellen",desc:"Stichpunkte eingeben – KI macht daraus ein professionelles Protokoll mit Beschlüssen.",how:"Schreib der KI: 'Erstelle aus diesen Stichpunkten ein Meeting-Protokoll: [Stichpunkte]'"},
+  {n:139,cat:"job",icon:"📆",title:"Projektplan entwerfen",desc:"KI strukturiert dein Projekt in Phasen, Meilensteine und Aufgaben.",how:"Schreib der KI: 'Erstelle einen Projektplan f\u00fcr [Projekt] mit Phasen und Meilensteinen.'"},
+  {n:140,cat:"job",icon:"⚡",title:"Aufgaben priorisieren",desc:"KI hilft mit der Eisenhower-Matrix oder anderen Methoden, deine To-Dos zu sortieren.",how:"Schreib der KI: 'Hier sind meine heutigen Aufgaben: [Liste]. Hilf mir sie nach Priorit\u00e4t zu sortieren.'"},
+  {n:141,cat:"job",icon:"🎯",title:"Karriereziele definieren",desc:"KI stellt gezielte Fragen und hilft dir, klare 1-, 3- und 5-Jahres-Ziele zu formulieren.",how:"Schreib der KI: 'Stelle mir gezielte Fragen, damit ich klare Karriereziele f\u00fcr 1, 3 und 5 Jahre entwickle.'"},
+  {n:142,cat:"job",icon:"💬",title:"Feedback geben lernen",desc:"KI zeigt dir, wie du konstruktives Feedback gibst und empfängst – mit Beispielen.",how:"Schreib der KI: 'Zeig mir wie ich konstruktives Feedback an [Kollege/Situation] formuliere.'"},
+  {n:143,cat:"job",icon:"🤝",title:"Konflikt im Team lösen",desc:"Beschreibe die Situation – KI hilft dir, deeskalierend und lösungsorientiert zu reagieren.",how:"Schreib der KI: 'Ich habe einen Konflikt mit [Situation beschreiben]. Wie reagiere ich deeskalierend?'"},
+  {n:144,cat:"job",icon:"🎓",title:"Weiterbildung recherchieren",desc:"Ziel und Budget eingeben – KI empfiehlt passende Kurse, Zertifikate und Plattformen.",how:"Schreib der KI: 'Ich m\u00f6chte [Ziel] erreichen. Budget: X\u20ac. Empfehle mir Kurse und Zertifikate.'"},
+  {n:145,cat:"job",icon:"🚪",title:"Kündigung schreiben",desc:"KI erstellt ein rechtlich korrektes Kündigungsschreiben – professionell und respektvoll.",how:"Schreib der KI: 'Schreibe ein professionelles K\u00fcndigungsschreiben mit Datum [X] und Grund [Y].'"},
+  {n:146,cat:"job",icon:"📄",title:"Arbeitszeugnis interpretieren",desc:"KI entschlüsselt versteckte Botschaften in Arbeitszeugnissen – was bedeutet \"stets bemüht\"?",how:"Schreib der KI: 'Was bedeutet dieses Arbeitszeugnis wirklich? Hier ist der Text: [einf\u00fcgen]'"},
+  {n:147,cat:"job",icon:"🧑‍💻",title:"Freelancer-Profil erstellen",desc:"KI schreibt ein überzeugendes Upwork/Fiverr-Profil, das Kunden anspricht.",how:"Schreib der KI: 'Schreibe ein \u00fcberzeugendes Upwork-Profil f\u00fcr mich. Meine F\u00e4higkeiten: [Liste]'"},
+  {n:148,cat:"job",icon:"💡",title:"Selbstständigkeit vorbereiten",desc:"Checkliste, erste Schritte und häufige Fehler – KI begleitet dich in die Selbstständigkeit.",how:"Schreib der KI: 'Ich m\u00f6chte mich selbstst\u00e4ndig machen mit [Idee]. Was sind die ersten 5 Schritte?'"},
+  {n:149,cat:"job",icon:"📈",title:"Businessplan skizzieren",desc:"Idee eingeben – KI erstellt ein Grundgerüst mit Marktanalyse, Zielgruppe und Finanzen.",how:"Schreib der KI: 'Erstelle ein Businessplan-Grundger\u00fcst f\u00fcr [Gesch\u00e4ftsidee].'"},
+  {n:150,cat:"job",icon:"📣",title:"Social-Media-Beiträge planen",desc:"KI erstellt einen Monats-Redaktionsplan mit Themen und Textentwürfen.",how:"Schreib der KI: 'Erstelle einen Social-Media-Redaktionsplan f\u00fcr [Monat] zum Thema [Thema].'"},
+  {n:151,cat:"job",icon:"🤖",title:"Kundenanfragen beantworten",desc:"KI entwirft professionelle, freundliche Antworten auf typische Kundenanfragen.",how:"Schreib der KI: 'Schreibe eine professionelle Antwort auf diese Kundenanfrage: [Anfrage einf\u00fcgen]'"},
+  {n:152,cat:"job",icon:"📃",title:"Angebot schreiben",desc:"KI erstellt ein professionelles Angebot mit allen Pflichtangaben und überzeugenden Texten.",how:"Schreib der KI: 'Erstelle ein Angebot f\u00fcr [Leistung] an [Kunde]. Preis: X\u20ac, Leistungsumfang: Y.'"},
+  {n:153,cat:"job",icon:"📊",title:"Wettbewerbsanalyse erstellen",desc:"Branche und Mitbewerber nennen – KI strukturiert eine verständliche Analyse.",how:"Schreib der KI: 'Erkl\u00e4re mir den Unterschied zwischen meinen Mitbewerbern: [Namen eingeben]'"},
+  {n:154,cat:"job",icon:"🏠",title:"Homeoffice-Routine optimieren",desc:"KI entwickelt eine produktive Tagesstruktur für die Arbeit von zuhause.",how:"Schreib der KI: 'Entwickle eine produktive Homeoffice-Tagesroutine f\u00fcr mich. Arbeitszeit: 8-17 Uhr.'"},
+  {n:155,cat:"job",icon:"🌐",title:"Netzwerken üben",desc:"KI trainiert dich mit Smalltalk, Elevator-Pitch und Nachfass-Nachrichten.",how:"Schreib der KI: 'Trainiere mit mir Small Talk f\u00fcr ein Netzwerk-Event in der [Branche].'"},
+  {n:156,cat:"job",icon:"📰",title:"Newsletter-Ideen entwickeln",desc:"Thema und Zielgruppe eingeben – KI generiert 20 Newsletter-Themen für ein Jahr.",how:"Schreib der KI: 'Generiere 20 Newsletter-Themen f\u00fcr das n\u00e4chste Jahr. Thema: [dein Bereich].'"},
+  {n:157,cat:"job",icon:"🎙️",title:"Workshop-Konzept entwickeln",desc:"KI strukturiert einen halboder ganztägigen Workshop mit Zeitplan und Methoden.",how:"Schreib der KI: 'Erstelle ein Workshop-Konzept zum Thema [X] f\u00fcr [Teilnehmer, Dauer].'"},
+  {n:158,cat:"job",icon:"📋",title:"Stellenanzeige interpretieren",desc:"KI analysiert, was das Unternehmen wirklich sucht – auch zwischen den Zeilen.",how:"Schreib der KI: 'Was sucht dieses Unternehmen wirklich? Hier ist die Stellenanzeige: [einf\u00fcgen]'"},
+  {n:159,cat:"job",icon:"🧠",title:"Brainstorming moderieren",desc:"KI liefert Impulsfragen und Methoden für kreative Team-Brainstormings.",how:"Schreib der KI: 'Gib mir Brainstorming-Fragen und Methoden f\u00fcr ein Team-Meeting zu [Thema].'"},
+  {n:160,cat:"job",icon:"🏆",title:"Jahresbericht zusammenfassen",desc:"Langen Bericht einfügen – KI fasst die 5 wichtigsten Punkte für deine Präsentation zusammen.",how:"Schreib der KI: 'Fasse diesen langen Bericht auf 5 Kernaussagen zusammen: [Text einf\u00fcgen]'"},
+  {n:161,cat:"job",icon:"🗣️",title:"Rede vorbereiten",desc:"KI schreibt dir eine mitreißende Rede – ob Betriebsfeier, Dankesrede oder Vortrag.",how:"Schreib der KI: 'Schreibe eine Dankesrede f\u00fcr mein Team bei der Weihnachtsfeier. Ton: herzlich.'"},
+  {n:162,cat:"job",icon:"🎓",title:"Fortbildungsantrag schreiben",desc:"KI formuliert ein überzeugendes Schreiben an den Arbeitgeber für eine Weiterbildung.",how:"Schreib der KI: 'Formuliere einen Fortbildungsantrag f\u00fcr [Kurs/Thema] an meinen Arbeitgeber.'"},
+  {n:163,cat:"job",icon:"🌟",title:"Erfolge dokumentieren",desc:"KI hilft dir, einen \"Brag-Doc\" zu führen – perfekt für Gehalts- und Beförderungsgespräche.",how:"Schreib der KI: 'Hilf mir einen Brag-Doc zu f\u00fchren. Frag mich nach meinen Erfolgen der letzten Monate.'"},
+  {n:164,cat:"job",icon:"🔄",title:"Jobwechsel planen",desc:"KI erstellt einen Schritt-für-Schritt-Plan für einen strategisch klugen Jobwechsel.",how:"Schreib der KI: 'Ich m\u00f6chte den Job wechseln. Erstelle mir einen strategischen 6-Monats-Plan.'"},
+  {n:165,cat:"job",icon:"🤝",title:"Onboarding-Checkliste",desc:"Erster Tag im neuen Job? KI erstellt eine Checkliste für die ersten 30, 60, 90 Tage.",how:"Schreib der KI: 'Erstelle eine Onboarding-Checkliste f\u00fcr die ersten 30-60-90 Tage in meinem neuen Job.'"},
+
+  // 🍳 GENUSS & KÜCHE (30)
+  {n:166,cat:"genuss",icon:"🥗",title:"Rezept nach Zutaten generieren",desc:"Sage der KI, was im Kühlschrank ist – sie erfindet daraus ein leckeres Gericht.",how:"Schreib der KI: 'Ich habe im K\u00fchlschrank: [Zutaten]. Erfinde daraus ein leckeres Rezept.'"},
+  {n:167,cat:"genuss",icon:"📅",title:"Wochenmenü planen",desc:"KI plant 7 Tage gesunde, abwechslungsreiche Mahlzeiten inklusive Einkaufsliste.",how:"Schreib der KI: 'Erstelle ein Wochenmen\u00fc f\u00fcr 4 Personen: abwechslungsreich, max. 30min Kochzeit.'"},
+  {n:168,cat:"genuss",icon:"🛒",title:"Einkaufsliste automatisch erstellen",desc:"Menüplan eingeben – KI erstellt eine sortierte Einkaufsliste nach Supermarktabteilungen.",how:"Schreib der KI: 'Erstelle eine sortierte Einkaufsliste aus diesen Rezepten: [Rezepte einf\u00fcgen]'"},
+  {n:169,cat:"genuss",icon:"🥦",title:"Vegane Alternativen finden",desc:"KI ersetzt Fleisch und Milch in jedem Rezept durch leckere pflanzliche Alternativen.",how:"Schreib der KI: 'Wandle dieses Rezept in eine vegane Version um: [Rezept einf\u00fcgen]'"},
+  {n:170,cat:"genuss",icon:"🍷",title:"Weinkombinationen empfehlen",desc:"Gericht beschreiben – KI empfiehlt passende Weine mit kurzer Erklärung warum.",how:"Schreib der KI: 'Welcher Wein passt zu [Gericht]? Erkl\u00e4re mir warum.'"},
+  {n:171,cat:"genuss",icon:"🍹",title:"Cocktail-Rezepte erfinden",desc:"Lieblingszutaten nennen – KI mixt ein einzigartiges Cocktail-Rezept für dich.",how:"Schreib der KI: 'Erfinde einen Cocktail mit [Zutaten]. Gib ihm einen kreativen Namen.'"},
+  {n:172,cat:"genuss",icon:"🎂",title:"Geburtstagskuchen-Ideen",desc:"Vorlieben des Geburtstagskindes eingeben – KI entwirft den perfekten Kuchen.",how:"Schreib der KI: 'Erfinde einen Geburtstagskuchen f\u00fcr jemanden der [Vorlieben] mag.'"},
+  {n:173,cat:"genuss",icon:"🔥",title:"Grill-Marinaden kreieren",desc:"KI erfindet nach deinen Geschmacksvorlieben einzigartige Marinade-Rezepte.",how:"Schreib der KI: 'Erfinde eine Grillmarinade f\u00fcr [Fleisch/Gem\u00fcse]. Ich mag: [Geschmack].'"},
+  {n:174,cat:"genuss",icon:"♻️",title:"Reste-Küche meistern",desc:"Überreste beschreiben – KI erfindet eine leckere neue Mahlzeit daraus.",how:"Schreib der KI: 'Ich habe \u00fcbrig: [Reste]. Mach daraus ein neues leckeres Gericht.'"},
+  {n:175,cat:"genuss",icon:"📦",title:"Meal Prep für die Woche",desc:"KI erstellt einen effizienten Kochplan für den Sonntag, der die ganze Woche trägt.",how:"Schreib der KI: 'Erstelle einen Meal-Prep-Plan f\u00fcr Sonntag, damit ich die ganze Woche versorgt bin.'"},
+  {n:176,cat:"genuss",icon:"🍞",title:"Brot selber backen",desc:"Schritt-für-Schritt-Anleitung für Anfänger – von einfachem Weißbrot bis Sauerteig.",how:"Schreib der KI: 'Erkl\u00e4re mir Schritt f\u00fcr Schritt wie ich ein einfaches Wei\u00dfbrot backe.'"},
+  {n:177,cat:"genuss",icon:"🫙",title:"Fermentieren für Anfänger",desc:"Kimchi, Sauerkraut, Kefir – KI erklärt Fermentation sicher und einfach.",how:"Schreib der KI: 'Erkl\u00e4re mir wie ich sicher mit Fermentieren anfange \u2013 mit Kimchi oder Sauerkraut.'"},
+  {n:178,cat:"genuss",icon:"🎉",title:"Party-Buffet planen",desc:"Gästezahl und Budget eingeben – KI plant ein festliches Buffet mit Mengen und Rezepten.",how:"Schreib der KI: 'Plane ein Buffet f\u00fcr [Anzahl] G\u00e4ste. Budget: X\u20ac. Anlass: [Fest].'"},
+  {n:179,cat:"genuss",icon:"🥩",title:"Barbecue-Abend vorbereiten",desc:"KI erstellt den perfekten BBQ-Ablauf mit Menü, Zeitplan und Zutatenliste.",how:"Schreib der KI: 'Erstelle einen BBQ-Abend-Plan mit Men\u00fc, Zeitplan und Einkaufsliste f\u00fcr [Anzahl] G\u00e4ste.'"},
+  {n:180,cat:"genuss",icon:"🌅",title:"Frühstücks-Routine optimieren",desc:"KI entwickelt eine gesunde, leckere Frühstücksroutine – auch für Morgenmuffel.",how:"Schreib der KI: 'Entwickle f\u00fcr mich eine gesunde Fr\u00fchst\u00fccksroutine, die max. 10 Minuten dauert.'"},
+  {n:181,cat:"genuss",icon:"🌿",title:"Superfood in den Alltag einbauen",desc:"Was ist Maca, Moringa & Co.? KI erklärt und zeigt, wie man sie lecker einbaut.",how:"Schreib der KI: 'Erkl\u00e4re mir was Maca, Moringa und Chia sind und zeig mir wie ich sie einbauen kann.'"},
+  {n:182,cat:"genuss",icon:"🍂",title:"Saisonale Küche entdecken",desc:"KI zeigt, was gerade Saison hat und welche Gerichte damit perfekt passen.",how:"Schreib der KI: 'Was hat gerade Saison im [Monat]? Welche Gerichte kann ich damit kochen?'"},
+  {n:183,cat:"genuss",icon:"🥢",title:"Asiatisch kochen für Einsteiger",desc:"Grundzutaten, Techniken und 5 Einsteigerrezepte – KI macht die Wok-Küche zugänglich.",how:"Schreib der KI: 'Erkl\u00e4re mir 5 Basis-Techniken der asiatischen K\u00fcche f\u00fcr Anf\u00e4nger mit Rezepten.'"},
+  {n:184,cat:"genuss",icon:"🎁",title:"Essbare Geschenke aus der Küche",desc:"KI gibt Ideen und Rezepte für selbst gemachte Leckereien zum Verschenken.",how:"Schreib der KI: 'Gib mir Ideen f\u00fcr essbare Mitbringsel aus der K\u00fcche \u2013 einfach und sch\u00f6n verpackt.'"},
+  {n:185,cat:"genuss",icon:"☕",title:"Kaffee-Wissen vertiefen",desc:"Espresso, Filter, Cold Brew – KI erklärt Zubereitung, Herkunft und Unterschiede.",how:"Schreib der KI: 'Erkl\u00e4re mir den Unterschied zwischen Espresso, Filterkaffee und Cold Brew.'"},
+  {n:186,cat:"genuss",icon:"🍵",title:"Tee-Sorten und ihre Wirkung",desc:"KI erklärt die gesundheitliche Wirkung verschiedener Tees und empfiehlt für jede Situation.",how:"Schreib der KI: 'Welcher Tee hilft bei [Beschwerden/Stimmung]? Erkl\u00e4re die Wirkung.'"},
+  {n:187,cat:"genuss",icon:"🥤",title:"Smoothie-Kombinationen entdecken",desc:"KI erfindet neue Smoothies nach Jahreszeit, Gesundheitsziel oder Vorlieben.",how:"Schreib der KI: 'Erfinde einen neuen Smoothie f\u00fcr [Ziel: Energie/Entgiftung/Immunsystem].'"},
+  {n:188,cat:"genuss",icon:"🏋️",title:"Essen für Sportler planen",desc:"KI erstellt einen Ernährungsplan rund ums Training – Pre-, Post-Workout und Alltag.",how:"Schreib der KI: 'Ich trainiere [Sportart]. Erstelle einen Ern\u00e4hrungsplan rund ums Training.'"},
+  {n:189,cat:"genuss",icon:"🧠",title:"Kalorien ohne Diätstress verstehen",desc:"KI erklärt Energiebedarf und hilft, ein gesundes Verhältnis zu Essen zu entwickeln.",how:"Schreib der KI: 'Erkl\u00e4re mir Kalorien und Energiebedarf ohne Di\u00e4t-Stress und moralische Wertung.'"},
+  {n:190,cat:"genuss",icon:"🌍",title:"Länderküche der Woche",desc:"KI stellt jede Woche eine neue Weltküche vor – mit Geschichte und Einsteiger-Rezept.",how:"Schreib der KI: 'Stell mir heute die K\u00fcche von [Land] vor: Geschichte, Zutaten, 1 Einsteigerrezept.'"},
+  {n:191,cat:"genuss",icon:"🥜",title:"Allergien beim Kochen berücksichtigen",desc:"KI passt jedes Rezept an Unverträglichkeiten an und schlägt Alternativen vor.",how:"Schreib der KI: 'Passe dieses Rezept an meine Laktose-Intoleranz an: [Rezept einf\u00fcgen]'"},
+  {n:192,cat:"genuss",icon:"🧁",title:"Backen ohne Zucker",desc:"KI erklärt Alternativen zu Zucker und passt deine Lieblingsrezepte an.",how:"Schreib der KI: 'Wie kann ich in diesem Rezept den Zucker ersetzen? [Rezept einf\u00fcgen]'"},
+  {n:193,cat:"genuss",icon:"🍕",title:"Pizzateig perfektionieren",desc:"Warum wird der Teig hart? KI erklärt Fehler und das Geheimnis des perfekten Teigs.",how:"Schreib der KI: 'Warum wird mein Pizzateig immer hart? Erkl\u00e4re mir das Geheimnis des perfekten Teigs.'"},
+  {n:194,cat:"genuss",icon:"🧀",title:"Käseplatte zusammenstellen",desc:"KI wählt harmonische Käsesorten, passende Begleiter und erklärt Schnitttechniken.",how:"Schreib der KI: 'Stelle mir eine harmonische K\u00e4seplatte zusammen f\u00fcr [Anzahl] Personen.'"},
+  {n:195,cat:"genuss",icon:"🍫",title:"Schokolade als Genuss entdecken",desc:"Kakaogehalt, Herkunft, Aromen – KI macht dich zum Schokoladen-Experten.",how:"Schreib der KI: 'Erkl\u00e4re mir wie ich Schokolade nach Kakaogehalt und Herkunft besser verstehe.'"},
+
+  // 💪 GESUNDHEIT & WOHLBEFINDEN (30)
+  {n:196,cat:"gesundheit",icon:"🩺",title:"Symptome einordnen",desc:"KI hilft dir, Symptome zu beschreiben und vorzusortieren – kein Arzt-Ersatz, aber gute Vorbereitung.",how:"Schreib der KI: 'Ich habe folgende Symptome seit [Zeit]: [Symptome]. Hilf mir das f\u00fcr den Arzt zu beschreiben.'"},
+  {n:197,cat:"gesundheit",icon:"💊",title:"Beipackzettel einfach erklärt",desc:"Medizin-Latein verständlich gemacht – KI erklärt Wechselwirkungen und Einnahmehinweise.",how:"Schreib der KI: 'Erkl\u00e4re mir diesen Beipackzettel in einfacher Sprache: [Text einf\u00fcgen]'"},
+  {n:198,cat:"gesundheit",icon:"🏥",title:"Arztgespräch vorbereiten",desc:"KI hilft dir, Symptome zu beschreiben und die richtigen Fragen an deinen Arzt zu stellen.",how:"Schreib der KI: 'Ich gehe zum Arzt wegen [Beschwerden]. Welche Fragen soll ich stellen?'"},
+  {n:199,cat:"gesundheit",icon:"🏃",title:"Fitnessplan für Anfänger",desc:"Ziel, Zeit und Ausrüstung eingeben – KI erstellt deinen persönlichen Einsteiger-Trainingsplan.",how:"Schreib der KI: 'Erstelle mir einen Fitnessplan f\u00fcr Anf\u00e4nger. Ziel: [X], Zeit: 3x30min/Woche.'"},
+  {n:200,cat:"gesundheit",icon:"😴",title:"Schlafqualität verbessern",desc:"KI analysiert deine Schlafgewohnheiten und gibt evidenzbasierte Tipps für besseren Schlaf.",how:"Schreib der KI: 'Ich schlafe schlecht. Hier meine Gewohnheiten: [beschreiben]. Was kann ich \u00e4ndern?'"},
+  {n:201,cat:"gesundheit",icon:"🧘",title:"Stress abbauen",desc:"KI erklärt verschiedene Stressbewältigungs-Methoden und welche zu deinem Typ passt.",how:"Schreib der KI: 'Ich bin gestresst durch [Situation]. Welche Techniken helfen mir am schnellsten?'"},
+  {n:202,cat:"gesundheit",icon:"🧘‍♀️",title:"Meditation starten",desc:"KI führt dich durch erste Meditationsübungen – auch für rastlose Köpfe.",how:"Schreib der KI: 'F\u00fchre mich durch eine 10-min\u00fctige Meditation f\u00fcr Einsteiger.'"},
+  {n:203,cat:"gesundheit",icon:"🌿",title:"Yoga-Routine für zuhause",desc:"KI erstellt eine 20-Minuten-Morgenroutine für Anfänger – mit Pose-Beschreibungen.",how:"Schreib der KI: 'Erstelle eine 20-min\u00fctige Yoga-Morgenroutine f\u00fcr Anf\u00e4nger.'"},
+  {n:204,cat:"gesundheit",icon:"🏅",title:"Laufplan für 5km-Ziel",desc:"Noch nie gelaufen? KI erstellt einen 8-Wochen-Plan von der Couch zum 5km-Lauf.",how:"Schreib der KI: 'Erstelle einen 8-Wochen-Laufplan: Von der Couch zu 5km.'"},
+  {n:205,cat:"gesundheit",icon:"💺",title:"Rückenschmerzen vorbeugen",desc:"KI gibt Übungen für einen starken Rücken und erklärt ergonomisches Sitzen und Stehen.",how:"Schreib der KI: 'Ich sitze viel im B\u00fcro. Gib mir \u00dcbungen gegen R\u00fcckenschmerzen f\u00fcr zwischendurch.'"},
+  {n:206,cat:"gesundheit",icon:"💻",title:"Ergonomie im Homeoffice",desc:"Stuhl, Bildschirm, Beleuchtung – KI prüft dein Setup und gibt konkrete Verbesserungstipps.",how:"Schreib der KI: 'Pr\u00fcfe mein Homeoffice-Setup auf Ergonomie: [Tisch, Stuhl, Monitor beschreiben]'"},
+  {n:207,cat:"gesundheit",icon:"🧬",title:"Hormon-Zyklus verstehen",desc:"KI erklärt den weiblichen Zyklus verständlich und wie er Energie und Stimmung beeinflusst.",how:"Schreib der KI: 'Erkl\u00e4re mir den weiblichen Zyklus und wie er meine Energie beeinflusst.'"},
+  {n:208,cat:"gesundheit",icon:"🌬️",title:"Atemübungen lernen",desc:"Box Breathing, 4-7-8, Wim Hof – KI erklärt und begleitet verschiedene Atemtechniken.",how:"Schreib der KI: 'F\u00fchre mich durch die Box-Breathing-Atemtechnik Schritt f\u00fcr Schritt.'"},
+  {n:209,cat:"gesundheit",icon:"🔥",title:"Burnout-Warnsignale erkennen",desc:"KI erklärt frühe Anzeichen von Burnout und welche Schritte du jetzt unternehmen kannst.",how:"Schreib der KI: 'Erkl\u00e4re mir die fr\u00fchen Warnsignale von Burnout und erste Gegenma\u00dfnahmen.'"},
+  {n:210,cat:"gesundheit",icon:"📵",title:"Digital Detox planen",desc:"KI entwirft einen realistischen Plan für einen bewussteren Umgang mit Bildschirmzeit.",how:"Schreib der KI: 'Erstelle mir einen realistischen Digital-Detox-Plan f\u00fcr eine Woche.'"},
+  {n:211,cat:"gesundheit",icon:"💆",title:"Selbstfürsorge-Routine",desc:"KI entwickelt eine persönliche Selbstfürsorge-Routine – angepasst an deinen Alltag.",how:"Schreib der KI: 'Entwickle eine Selbstf\u00fcrsorge-Routine f\u00fcr mich. Verf\u00fcgbare Zeit: [X] Minuten t\u00e4glich.'"},
+  {n:212,cat:"gesundheit",icon:"🌱",title:"Naturheilkunde einfach erklärt",desc:"Was steckt hinter Homöopathie, Phytotherapie & Co.? KI erklärt evidenzbasiert.",how:"Schreib der KI: 'Erkl\u00e4re mir Phytotherapie und welche Heilpflanzen bei [Beschwerden] helfen.'"},
+  {n:213,cat:"gesundheit",icon:"🚑",title:"Erste Hilfe auffrischen",desc:"KI erklärt wichtige Erste-Hilfe-Maßnahmen und testet dein Wissen spielerisch.",how:"Schreib der KI: 'Teste mein Erste-Hilfe-Wissen mit 10 Fragen und erkl\u00e4re mir die richtigen Antworten.'"},
+  {n:214,cat:"gesundheit",icon:"❤️",title:"Blutdruck & Cholesterin verstehen",desc:"Was bedeuten meine Werte? KI erklärt Messwerte verständlich und wann Handlungsbedarf besteht.",how:"Schreib der KI: 'Mein Blutdruck ist [Wert]. Erkl\u00e4re mir was das bedeutet.'"},
+  {n:215,cat:"gesundheit",icon:"🧪",title:"Laborwerte interpretieren",desc:"KI erklärt deinen Blutbefund in einfacher Sprache – Arztgespräch-Vorbereitung inklusive.",how:"Schreib der KI: 'Erkl\u00e4re mir diese Laborwerte aus meinem Blutbild in einfacher Sprache: [Werte]'"},
+  {n:216,cat:"gesundheit",icon:"🚭",title:"Raucherentwöhnung begleiten",desc:"KI unterstützt mit Strategien, Motivationstexten und Tipps für den Rauchstopp.",how:"Schreib der KI: 'Ich m\u00f6chte aufh\u00f6ren zu rauchen. Erstelle mir einen Plan f\u00fcr die ersten 2 Wochen.'"},
+  {n:217,cat:"gesundheit",icon:"💪",title:"Motivations-Coach",desc:"KI hilft dir, dranzubleiben – mit täglichen Impulsen, Zielerinnerungen und Erfolgs-Tracking.",how:"Schreib der KI: 'Ich brauche Motivation f\u00fcr [Ziel]. Schick mir t\u00e4glich einen Motivationsimpuls.'"},
+  {n:218,cat:"gesundheit",icon:"🌈",title:"Mentale Gesundheit Themen erklärt",desc:"Angst, Depression, ADHS – KI erklärt einfühlsam und informiert ohne zu urteilen.",how:"Schreib der KI: 'Erkl\u00e4re mir [Angstst\u00f6rung/Depression/ADHS] in einfacher, wertfreier Sprache.'"},
+  {n:219,cat:"gesundheit",icon:"😁",title:"Zahnarztangst überwinden",desc:"KI erklärt Behandlungen verständlich und gibt Techniken zum Angstabbau.",how:"Schreib der KI: 'Erkl\u00e4re mir was bei einer Wurzelbehandlung passiert \u2013 ich habe Angst davor.'"},
+  {n:220,cat:"gesundheit",icon:"👶",title:"Kinderimpfungen verstehen",desc:"STIKO-Empfehlungen einfach erklärt – KI beantwortet typische Elternfragen sachlich.",how:"Schreib der KI: 'Erkl\u00e4re mir den deutschen Impfkalender f\u00fcr Kinder im Alter von [X] Monaten/Jahren.'"},
+  {n:221,cat:"gesundheit",icon:"🌸",title:"Wechseljahre verstehen",desc:"Symptome, Hormone, Therapieoptionen – KI erklärt die Wechseljahre umfassend und offen.",how:"Schreib der KI: 'Erkl\u00e4re mir die Wechseljahre: Symptome, Hormone und Behandlungsoptionen.'"},
+  {n:222,cat:"gesundheit",icon:"🤸",title:"Bewegung in den Alltag einbauen",desc:"KI findet für jeden Alltag kleine Bewegungs-Hacks – ohne Gym oder Ausrüstung.",how:"Schreib der KI: 'Gib mir 10 Ideen, wie ich mehr Bewegung in meinen Alltag einbauen kann ohne Sport.'"},
+  {n:223,cat:"gesundheit",icon:"🫁",title:"Lungenfunktion verstehen",desc:"KI erklärt Asthma, COPD & Co. in klarer Sprache und wann ein Arzt nötig ist.",how:"Schreib der KI: 'Erkl\u00e4re mir Asthma/COPD in einfacher Sprache und wann ich zum Arzt muss.'"},
+  {n:224,cat:"gesundheit",icon:"🧠",title:"Gedächtnis & Gehirn trainieren",desc:"KI empfiehlt wissenschaftlich fundierte Übungen für ein schärferes Gedächtnis.",how:"Schreib der KI: 'Gib mir wissenschaftlich fundierte \u00dcbungen um mein Ged\u00e4chtnis im Alltag zu trainieren.'"},
+  {n:225,cat:"gesundheit",icon:"🏖️",title:"Erholungsurlaub planen",desc:"KI entwickelt einen Entspannungsplan – für Menschen, die auch im Urlaub nicht abschalten können.",how:"Schreib der KI: 'Ich kann im Urlaub nicht abschalten. Entwickle einen Erholungsplan f\u00fcr mich.'"},
+
+  // 👨‍👩‍👧 FAMILIE & KINDER (25)
+  {n:226,cat:"familie",icon:"📚",title:"Schulaufgaben erklären lassen",desc:"KI erklärt Mathe, Deutsch, Geschichte & Co. kindgerecht und geduldig.",how:"Schreib der KI: 'Erkl\u00e4re meinem Kind (Alter X) [Thema] auf kindgerechte und spannende Weise.'"},
+  {n:227,cat:"familie",icon:"📖",title:"Gutenacht-Geschichten erfinden",desc:"KI erfindet einzigartige Gutenacht-Geschichten mit dem Lieblings-Tier des Kindes als Held.",how:"Schreib der KI: 'Erfinde eine Gutenachtgeschichte f\u00fcr ein [Alter]-j\u00e4hriges Kind \u00fcber [Lieblingstier].'"},
+  {n:228,cat:"familie",icon:"🎂",title:"Kindergeburtstag planen",desc:"Motto, Spiele, Essen, Ablauf – KI plant das perfekte Fest für jedes Alter.",how:"Schreib der KI: 'Plane einen Kindergeburtstag f\u00fcr [Alter] Kinder. Motto: [X]. Budget: Y\u20ac.'"},
+  {n:229,cat:"familie",icon:"💬",title:"Erziehungsfragen besprechen",desc:"Trotzphase, Geschwisterstreit, Pubertät – KI bietet Orientierung ohne zu urteilen.",how:"Schreib der KI: 'Mein Kind ist in der Trotzphase. Was hilft wirklich? Gib mir konkrete Strategien.'"},
+  {n:230,cat:"familie",icon:"✈️",title:"Familienurlaub planen",desc:"Mit Kindern verreisen – KI findet die richtigen Ziele, Unterkünfte und Aktivitäten.",how:"Schreib der KI: 'Plane einen Familienurlaub f\u00fcr [Alter der Kinder]. Budget: X\u20ac. Wir m\u00f6gen: [Vorlieben].'"},
+  {n:231,cat:"familie",icon:"🎁",title:"Geburtstagsgeschenk-Ideen",desc:"Alter und Interessen eingeben – KI liefert 10 kreative und passende Geschenkideen.",how:"Schreib der KI: 'Gib mir 10 Geschenkideen f\u00fcr [Person, Alter, Interessen]. Budget: X\u20ac.'"},
+  {n:232,cat:"familie",icon:"🏠",title:"Homeschooling unterstützen",desc:"KI erstellt Lernpläne, Übungsaufgaben und erklärt Inhalte aus jedem Lehrplan.",how:"Schreib der KI: 'Erstelle einen Lernplan und \u00dcbungsaufgaben f\u00fcr meinen Sohn/meine Tochter (Klasse X, Thema Y).'"},
+  {n:233,cat:"familie",icon:"👨‍👩‍👧",title:"Familienregeln formulieren",desc:"KI hilft, klare, faire Familienregeln zu entwickeln – an denen alle mitgewirkt haben.",how:"Schreib der KI: 'Formuliere 5 Familienregeln, die klar und positiv formuliert sind f\u00fcr Kinder ab [Alter].'"},
+  {n:234,cat:"familie",icon:"📱",title:"Kindersicherheit im Netz",desc:"KI erklärt altersgerechte Mediennutzung und wie du dein Kind online schützt.",how:"Schreib der KI: 'Erkl\u00e4re mir wie ich mein Kind (Alter X) sicher im Internet sch\u00fctze.'"},
+  {n:235,cat:"familie",icon:"🎨",title:"Eltern-Kind-Projekte planen",desc:"DIY, Kochen, Bauen – KI schlägt altersgerechte Gemeinschaftsprojekte vor.",how:"Schreib der KI: 'Schlage mir ein gemeinsames Eltern-Kind-Projekt vor. Kind ist [Alter], mag [Hobbys].'"},
+  {n:236,cat:"familie",icon:"👴",title:"Großeltern einbinden",desc:"KI gibt Ideen für sinnvolle und schöne Aktivitäten zwischen Großeltern und Enkeln.",how:"Schreib der KI: 'Gib mir 10 Ideen f\u00fcr sch\u00f6ne Aktivit\u00e4ten zwischen Gro\u00dfeltern und Enkeln (Alter X).'"},
+  {n:237,cat:"familie",icon:"🧸",title:"Babyausstattung-Liste erstellen",desc:"KI erstellt eine realistische Liste – was wirklich nötig ist und was Marketingmythos ist.",how:"Schreib der KI: 'Erstelle eine realistische Babyausstattungs-Liste. Was brauche ich wirklich?'"},
+  {n:238,cat:"familie",icon:"🤰",title:"Schwangerschafts-FAQ",desc:"Typische Fragen rund um Schwangerschaft, Geburt und die Zeit danach – KI antwortet einfühlsam.",how:"Schreib der KI: 'Beantworte meine h\u00e4ufigsten Fragen zur Schwangerschaft im [Monat].'"},
+  {n:239,cat:"familie",icon:"🏫",title:"Schulwechsel vorbereiten",desc:"KI begleitet Eltern und Kind durch den Übergang – mit Tipps und Checklisten.",how:"Schreib der KI: 'Mein Kind wechselt zur [Schulform]. Wie bereite ich es vor? Erstelle eine Checkliste.'"},
+  {n:240,cat:"familie",icon:"🌻",title:"Kita-Anfang begleiten",desc:"Eingewöhnung, typische Ängste, Fragen an ErzieherInnen – KI bereitet euch vor.",how:"Schreib der KI: 'Mein Kind f\u00e4ngt mit der Kita an. Was hilft bei der Eingew\u00f6hnung?'"},
+  {n:241,cat:"familie",icon:"💰",title:"Familien-Budget gemeinsam planen",desc:"KI hilft, das Familienbudget fair und transparent zu gestalten – auch mit Kindern besprechen.",how:"Schreib der KI: 'Erstelle ein transparentes Familienbudget das ich auch mit meinen Kindern besprechen kann.'"},
+  {n:242,cat:"familie",icon:"🧹",title:"Haushaltsaufgaben für Kinder",desc:"Welche Aufgaben sind in welchem Alter geeignet? KI gibt altersgerechte Ideen.",how:"Schreib der KI: 'Welche Haushaltsaufgaben sind f\u00fcr Kinder im Alter von [X] Jahren geeignet?'"},
+  {n:243,cat:"familie",icon:"💛",title:"Patchwork-Familie Tipps",desc:"KI gibt Impulse für ein harmonisches Zusammenleben in Patchwork-Familien.",how:"Schreib der KI: 'Gib mir Tipps f\u00fcr ein harmonisches Zusammenleben in einer Patchwork-Familie.'"},
+  {n:244,cat:"familie",icon:"⚖️",title:"Kinderrechte einfach erklärt",desc:"KI erklärt die UN-Kinderrechtskonvention – altersgerecht für Kinder und verständlich für Eltern.",how:"Schreib der KI: 'Erkl\u00e4re meinem Kind (Alter X) die Kinderrechte auf spielerische Weise.'"},
+  {n:245,cat:"familie",icon:"🎮",title:"Bildschirmzeit sinnvoll gestalten",desc:"KI gibt Ideen, wie Gaming und YouTube-Konsum mit Lernen verbunden werden kann.",how:"Schreib der KI: 'Mein Kind spielt viel [Spiel]. Wie kann ich das sinnvoll einbetten und begrenzen?'"},
+  {n:246,cat:"familie",icon:"🌙",title:"Schlafprobleme bei Kindern",desc:"Einschlafschwierigkeiten, Albträume, frühes Aufwachen – KI gibt evidenzbasierte Tipps.",how:"Schreib der KI: 'Mein Kind (Alter X) schl\u00e4ft schlecht. Was kann ich konkret tun?'"},
+  {n:247,cat:"familie",icon:"💪",title:"Teenager-Kommunikation verbessern",desc:"Wie rede ich mit meinem Teenager? KI gibt Kommunikationsstrategien und echte Beispiele.",how:"Schreib der KI: 'Wie f\u00fchre ich ein gutes Gespr\u00e4ch mit meinem Teenager \u00fcber [schwieriges Thema]?'"},
+  {n:248,cat:"familie",icon:"🌺",title:"Ferienbetreuung planen",desc:"KI hilft, die Schulferien mit Betreuung und Aktivitäten zu planen – auch für Berufstätige.",how:"Schreib der KI: 'Erstelle ein Ferienprogramm f\u00fcr [Wochen] Sommerferien mit Kindern im Alter [X].'"},
+  {n:249,cat:"familie",icon:"✏️",title:"Schul-Aufsatz gemeinsam üben",desc:"KI erklärt Aufsatz-Strukturen und gibt kindgerechtes Feedback auf erste Entwürfe.",how:"Schreib der KI: 'Hilf meinem Kind, einen Aufsatz zu schreiben. Thema: [X]. Klasse: Y.'"},
+  {n:250,cat:"familie",icon:"🔬",title:"Wissensdurst von Kindern stillen",desc:"Warum ist der Himmel blau? KI beantwortet Kinderfragen altersgerecht und begeisternd.",how:"Schreib der KI: 'Mein Kind fragt: Warum ist der Himmel blau? Erkl\u00e4re es kindgerecht und begeisternd.'"},
+
+  // 📚 LERNEN & BILDUNG (28)
+  {n:251,cat:"lernen",icon:"🗣️",title:"Fremdsprache täglich üben",desc:"KI führt täglich ein kurzes Gespräch in der Zielsprache – mit Korrekturen und Erklärungen.",how:"Schreib der KI: 'F\u00fchre mit mir ein Alltagsgespr\u00e4ch auf [Sprache]. Niveau: Anf\u00e4nger. Korrigiere mich.'"},
+  {n:252,cat:"lernen",icon:"✏️",title:"Grammatik-Fehler korrigieren",desc:"Text eingeben – KI korrigiert und erklärt jeden Fehler mit Lerneffekt.",how:"Schreib der KI: 'Korrigiere diesen Text und erkl\u00e4re jeden Fehler: [Text einf\u00fcgen]'"},
+  {n:253,cat:"lernen",icon:"📝",title:"Vokabeln mit Kontext lernen",desc:"KI erstellt Beispielsätze und Eselsbrücken für neue Vokabeln – kein stupides Pauken.",how:"Schreib der KI: 'Erkl\u00e4re mir diese Vokabeln mit Beispiels\u00e4tzen und einer Eselsbr\u00fccke: [W\u00f6rter]'"},
+  {n:254,cat:"lernen",icon:"🔬",title:"Wissenschaft vereinfacht",desc:"Von Quantenphysik bis Genetik – KI erklärt komplexe Themen mit Alltagsbeispielen.",how:"Schreib der KI: 'Erkl\u00e4re mir [wissenschaftliches Thema] so als w\u00e4re ich 15 Jahre alt.'"},
+  {n:255,cat:"lernen",icon:"🏺",title:"Geschichte lebendig erleben",desc:"KI erzählt Geschichte als spannende Geschichte – mit Persönlichkeiten und Zusammenhängen.",how:"Schreib der KI: 'Erz\u00e4hle mir die Geschichte von [Ereignis/Epoche] als spannende Geschichte.'"},
+  {n:256,cat:"lernen",icon:"➗",title:"Mathematik Schritt für Schritt",desc:"KI löst keine Aufgaben für dich, sondern erklärt den Weg – bis du es selbst kannst.",how:"Schreib der KI: 'Erkl\u00e4re mir [Mathe-Thema] Schritt f\u00fcr Schritt. Gib mir dann eine \u00dcbungsaufgabe.'"},
+  {n:257,cat:"lernen",icon:"📖",title:"Buch-Zusammenfassung erstellen",desc:"KI fasst lange Sachbücher auf die 5 wichtigsten Erkenntnisse zusammen.",how:"Schreib der KI: 'Fasse dieses Sachbuch auf die 5 wichtigsten Kernaussagen zusammen: [Titel/Text]'"},
+  {n:258,cat:"lernen",icon:"🎙️",title:"Podcast-Inhalte vertiefen",desc:"KI bespricht Podcast-Themen mit dir, stellt Verständnisfragen und liefert Hintergründe.",how:"Schreib der KI: 'Ich habe diese Podcast-Folge geh\u00f6rt: [Thema]. Stelle mir Vertiefungsfragen.'"},
+  {n:259,cat:"lernen",icon:"🗓️",title:"Lernplan für 30 Tage",desc:"Ziel und verfügbare Zeit eingeben – KI erstellt einen realistischen, täglichen Lernplan.",how:"Schreib der KI: 'Erstelle einen 30-Tage-Lernplan f\u00fcr [Ziel]. Verf\u00fcgbare Zeit: X Minuten/Tag.'"},
+  {n:260,cat:"lernen",icon:"🧩",title:"Lerntyp herausfinden",desc:"KI stellt gezielte Fragen und empfiehlt die beste Lernmethode für deinen Typ.",how:"Schreib der KI: 'Stelle mir 5 Fragen um meinen Lerntyp herauszufinden und empfiehl mir Methoden.'"},
+  {n:261,cat:"lernen",icon:"🦉",title:"Philosophie-Basics",desc:"Sokrates, Nietzsche, Kant – KI erklärt große Denker und ihre Ideen ohne Kopfschmerzen.",how:"Schreib der KI: 'Erkl\u00e4re mir die Philosophie von [Denker] mit einem Alltagsbeispiel.'"},
+  {n:262,cat:"lernen",icon:"🧠",title:"Psychologie-Konzepte verstehen",desc:"Kognitive Verzerrungen, Bindungstheorie, Motivation – KI macht Psychologie alltagstauglich.",how:"Schreib der KI: 'Erkl\u00e4re mir kognitive Verzerrungen mit Alltagsbeispielen.'"},
+  {n:263,cat:"lernen",icon:"📰",title:"Wissenschaftliche Paper zusammenfassen",desc:"Füge ein Abstract oder Paper ein – KI fasst die Kernaussagen verständlich zusammen.",how:"Schreib der KI: 'Fasse die Kernaussagen dieses wissenschaftlichen Textes zusammen: [Abstract einf\u00fcgen]'"},
+  {n:264,cat:"lernen",icon:"🎤",title:"Rhetorik lernen",desc:"KI erklärt Redetechniken, gibt Feedback auf Texte und hilft beim Struktur-Training.",how:"Schreib der KI: 'Erkl\u00e4re mir 3 Rhetoriktechniken und zeig mir wie ich sie in Gespr\u00e4chen einsetze.'"},
+  {n:265,cat:"lernen",icon:"🃏",title:"Lernkarten generieren",desc:"Thema eingeben – KI erstellt sofort Frage-Antwort-Karten für effektives Wiederholen.",how:"Schreib der KI: 'Erstelle 20 Lernkarten (Frage/Antwort) zum Thema [Thema].'"},
+  {n:266,cat:"lernen",icon:"🗺️",title:"Mind-Map erstellen",desc:"KI strukturiert Wissen in übersichtliche Mind-Map-Formate – perfekt für die Prüfungsvorbereitung.",how:"Schreib der KI: 'Erstelle eine Mind-Map zu [Thema] als Text-Struktur mit Unterpunkten.'"},
+  {n:267,cat:"lernen",icon:"🏅",title:"Zertifikat-Vorbereitung",desc:"IELTS, Führerscheintheorie, Berufsschule – KI erstellt Übungsaufgaben und Erklärungen.",how:"Schreib der KI: 'Erstelle \u00dcbungsaufgaben f\u00fcr die [Zertifikat]-Pr\u00fcfung zum Thema [Thema].'"},
+  {n:268,cat:"lernen",icon:"🇬🇧",title:"Business-Englisch verbessern",desc:"KI übt E-Mails, Meetings und Präsentationen auf Englisch – mit sofortigem Feedback.",how:"Schreib der KI: 'Schreibe diese E-Mail auf professionelles Business-Englisch um: [Text]'"},
+  {n:269,cat:"lernen",icon:"✍️",title:"Kreatives Schreiben üben",desc:"KI gibt Schreibimpulse, korrigiert Stil und hilft dir, deine Stimme als Autor zu finden.",how:"Schreib der KI: 'Gib mir einen Schreibimpuls f\u00fcr eine Kurzgeschichte und dann Feedback auf meinen Text.'"},
+  {n:270,cat:"lernen",icon:"💡",title:"Wikipedia-Artikel vereinfachen",desc:"Komplizierte Wiki-Artikel eingeben – KI erstellt eine einfache, verständliche Version.",how:"Schreib der KI: 'Erkl\u00e4re mir diesen Wikipedia-Artikel in einfachen Worten: [Text einf\u00fcgen]'"},
+  {n:271,cat:"lernen",icon:"🎯",title:"Prüfungsvorbereitung strukturieren",desc:"Prüfungsthemen eingeben – KI erstellt einen Lernplan mit Prioritäten und Puffertagen.",how:"Schreib der KI: 'Ich schreibe Pr\u00fcfung zu [Themen]. Erstelle mir einen Lernplan mit Priorit\u00e4ten.'"},
+  {n:272,cat:"lernen",icon:"🌍",title:"Sprachaustausch vorbereiten",desc:"KI hilft mit Themen, Formulierungen und Eisbrechern für den Sprachaustausch-Partner.",how:"Schreib der KI: 'Ich treffe meinen Sprachaustausch-Partner. Schlage mir Themen und Einstiegss\u00e4tze vor.'"},
+  {n:273,cat:"lernen",icon:"🎭",title:"Debatte & Diskussion üben",desc:"KI spielt Gegenposition und hilft dir, Argumente zu schärfen und Gegenargumente zu parieren.",how:"Schreib der KI: 'Spiel die Gegenposition zu meiner Meinung zu [Thema]. Ich will argumentieren \u00fcben.'"},
+  {n:274,cat:"lernen",icon:"📻",title:"Eigenen Podcast planen",desc:"KI hilft bei Konzept, Episodenstruktur und den ersten Skripten für deinen Podcast.",how:"Schreib der KI: 'Hilf mir ein Podcast-Konzept zu entwickeln. Mein Thema: [X]. Zielgruppe: [Y].'"},
+  {n:275,cat:"lernen",icon:"📕",title:"Buchclub-Diskussion vorbereiten",desc:"Buch eingeben – KI liefert Diskussionsfragen, Hintergründe und Interpretationsansätze.",how:"Schreib der KI: 'Wir lesen im Buchclub [Buchtitel]. Erstelle 10 Diskussionsfragen.'"},
+  {n:276,cat:"lernen",icon:"🖊️",title:"Schreiben mit KI-Feedback",desc:"Text einreichen – KI gibt strukturiertes Feedback zu Stil, Struktur und Verständlichkeit.",how:"Schreib der KI: 'Gib mir strukturiertes Feedback zu meinem Text: [Text einf\u00fcgen]'"},
+  {n:277,cat:"lernen",icon:"🌐",title:"Aktuelle Nachrichten einordnen",desc:"KI erklärt geopolitische Ereignisse, historische Hintergründe und Zusammenhänge.",how:"Schreib der KI: 'Erkl\u00e4re mir [aktuelles Ereignis] mit historischem Hintergrund und Zusammenh\u00e4ngen.'"},
+  {n:278,cat:"lernen",icon:"📊",title:"Statistiken verstehen",desc:"KI erklärt Diagramme, Umfragen und Studien – und zeigt, wie man sie kritisch liest.",how:"Schreib der KI: 'Erkl\u00e4re mir diese Statistik kritisch: Was zeigt sie wirklich? [Statistik einf\u00fcgen]'"},
+
+  // 🎨 KREATIVITÄT & HOBBY (25)
+  {n:279,cat:"kreativ",icon:"✍️",title:"Kurzgeschichte schreiben",desc:"Genre und erste Idee eingeben – KI hilft dir, daraus eine fertige Kurzgeschichte zu entwickeln.",how:"Schreib der KI: 'Ich habe diese Idee f\u00fcr eine Geschichte: [Idee]. Hilf mir daraus eine Kurzgeschichte zu entwickeln.'"},
+  {n:280,cat:"kreativ",icon:"🎉",title:"Geburtstagsgedicht erstellen",desc:"Name, Alter und 3 Eigenschaften eingeben – KI schreibt ein persönliches, herzliches Gedicht.",how:"Schreib der KI: 'Schreibe ein lustiges Geburtstagsgedicht f\u00fcr [Name], der/die [Eigenschaft X und Y] liebt.'"},
+  {n:281,cat:"kreativ",icon:"📸",title:"Fotoprojekt-Ideen entwickeln",desc:"KI gibt Themenideen für Fotoprojekte – von 52-Wochen-Challenges bis Street Photography.",how:"Schreib der KI: 'Gib mir 10 kreative Fotoprojekt-Ideen, die ich alleine umsetzen kann.'"},
+  {n:282,cat:"kreativ",icon:"🎵",title:"Musik-Playlist nach Stimmung",desc:"Beschreibe deine aktuelle Stimmung – KI erstellt eine Playlist-Idee mit Genres und Titeln.",how:"Schreib der KI: 'Erstelle eine Playlist-Idee f\u00fcr folgende Stimmung: [beschreiben]. Genre: offen.'"},
+  {n:283,cat:"kreativ",icon:"🔨",title:"DIY-Projekt planen",desc:"Idee beschreiben – KI erstellt Materialliste, Werkzeug und Schritt-für-Schritt-Anleitung.",how:"Schreib der KI: 'Ich m\u00f6chte [DIY-Projekt] bauen. Erstelle eine Materialliste und Anleitung.'"},
+  {n:284,cat:"kreativ",icon:"🧶",title:"Basteln mit Kindern",desc:"KI liefert saisonale Bastelideen mit Anleitung – aus Materialien, die zuhause sind.",how:"Schreib der KI: 'Schlage mir 5 Bastelideen vor die ich mit meinem Kind (Alter X) aus Haushaltsmaterialien basteln kann.'"},
+  {n:285,cat:"kreativ",icon:"📰",title:"Blog-Beiträge strukturieren",desc:"Thema eingeben – KI entwirft Titel, Einleitung, Struktur und Fazit für deinen Beitrag.",how:"Schreib der KI: 'Strukturiere meinen Blog-Beitrag zu [Thema]: Titel, Einleitung, 3 Abschnitte, Fazit.'"},
+  {n:286,cat:"kreativ",icon:"🎬",title:"YouTube-Video-Ideen finden",desc:"Dein Kanal und Zielgruppe beschreiben – KI generiert 10 Video-Ideen mit Hooks.",how:"Schreib der KI: 'Gib mir 10 YouTube-Video-Ideen f\u00fcr meinen Kanal \u00fcber [Thema]. Mit Hooks.'"},
+  {n:287,cat:"kreativ",icon:"📱",title:"Instagram-Captions schreiben",desc:"Foto beschreiben – KI schreibt authentische, reichweitenstarke Bildunterschriften.",how:"Schreib der KI: 'Schreibe 3 verschiedene Instagram-Captions f\u00fcr dieses Foto: [Foto beschreiben]'"},
+  {n:288,cat:"kreativ",icon:"🧶",title:"Strickprojekt planen",desc:"Für wen und was? KI wählt passendes Garn, Muster und schätzt den Zeitaufwand.",how:"Schreib der KI: 'Ich m\u00f6chte [Strickprojekt] f\u00fcr [Person] stricken. Empfehle Garn, Muster und Nadeln.'"},
+  {n:289,cat:"kreativ",icon:"🖊️",title:"Zeichnen lernen",desc:"KI empfiehlt Übungsfolgen, Ressourcen und erklärt Grundtechniken für Einsteiger.",how:"Schreib der KI: 'Erstelle mir einen Lernplan zum Zeichnen f\u00fcr absolute Anf\u00e4nger f\u00fcr 30 Tage.'"},
+  {n:290,cat:"kreativ",icon:"💬",title:"Sprüche & Zitate sammeln",desc:"KI kuratiert passende Zitate für jedes Thema, jeden Anlass und jede Stimmung.",how:"Schreib der KI: 'Sammle 10 passende Zitate zum Thema [Thema] f\u00fcr [Anlass].'"},
+  {n:291,cat:"kreativ",icon:"🎲",title:"Tischspiel-Regeln erklären",desc:"Komplizierte Spielregeln vereinfacht erklärt – KI fasst das Wesentliche zusammen.",how:"Schreib der KI: 'Erkl\u00e4re mir die Regeln von [Spiel] in maximal 5 einfachen Punkten.'"},
+  {n:292,cat:"kreativ",icon:"❓",title:"Quiz & Rätsel generieren",desc:"KI erstellt maßgeschneiderte Quizfragen für Partys, Spieleabende oder Schulungen.",how:"Schreib der KI: 'Erstelle 15 Quizfragen zu [Thema] f\u00fcr unsere Spielrunde mit Antworten.'"},
+  {n:293,cat:"kreativ",icon:"🔐",title:"Escape-Room-Idee entwickeln",desc:"KI entwirft ein komplettes Escape-Room-Konzept für zuhause – mit Rätseln und Geschichte.",how:"Schreib der KI: 'Entwickle ein Escape-Room-Konzept f\u00fcr zuhause. Thema: [X]. Dauer: 60 Min.'"},
+  {n:294,cat:"kreativ",icon:"📚",title:"Buchempfehlungen nach Geschmack",desc:"Lieblingsgenres und 3 Lieblingsbücher nennen – KI empfiehlt deinen nächsten Liebling.",how:"Schreib der KI: 'Ich mag [3 Lieblingsb\u00fccher]. Empfehle mir meinen n\u00e4chsten Liebling.'"},
+  {n:295,cat:"kreativ",icon:"🎥",title:"Film-Abend kuratieren",desc:"Stimmung und Gesellschaft beschreiben – KI wählt den perfekten Film für den Abend.",how:"Schreib der KI: 'Wir sind [Gruppe, Stimmung] und wollen einen Film schauen. Was empfiehlst du?'"},
+  {n:296,cat:"kreativ",icon:"🏠",title:"Heimkino-Setup planen",desc:"Budget und Raum beschreiben – KI empfiehlt Beamer, Sound und Einrichtung.",how:"Schreib der KI: 'Plane ein Heimkino-Setup f\u00fcr [Raum, Budget]. Was brauche ich wirklich?'"},
+  {n:297,cat:"kreativ",icon:"🎭",title:"Theaterabend vorbereiten",desc:"KI gibt Hintergründe zum Stück, Regisseur und erklärt die Symbolik – für mehr Genuss.",how:"Schreib der KI: 'Ich sehe heute [Theaterst\u00fcck]. Gib mir Hintergr\u00fcnde und worauf ich achten soll.'"},
+  {n:298,cat:"kreativ",icon:"📸",title:"Foto-Buch gestalten",desc:"KI gibt Ideen für Struktur, Titel und Bildauswahl für ein professionelles Fotobuch.",how:"Schreib der KI: 'Hilf mir ein Fotobuch zu strukturieren. Reise: [Destination]. Seiten: ca. 30.'"},
+  {n:299,cat:"kreativ",icon:"🗂️",title:"Familien-Chronik digitalisieren",desc:"KI erklärt, wie man alte Fotos und Geschichten in eine digitale Familienchronik überführt.",how:"Schreib der KI: 'Wie digitalisiere ich alte Familienfotos und Geschichten zu einer Chronik?'"},
+  {n:300,cat:"kreativ",icon:"🎸",title:"Musikinstrument lernen",desc:"KI erstellt einen Lernpfad für Gitarre, Klavier & Co. – mit Übungsplan für Anfänger.",how:"Schreib der KI: 'Ich lerne [Instrument]. Erstelle mir einen \u00dcbungsplan f\u00fcr Anf\u00e4nger, 20min/Tag.'"},
+  {n:301,cat:"kreativ",icon:"🤝",title:"KI als kreativer Sparringspartner",desc:"Ideen vorstellen und diskutieren – KI stellt Fragen, gibt Feedback und denkt mit.",how:"Schreib der KI: 'Ich habe diese kreative Idee: [Idee]. Diskutiere sie mit mir, stell Fragen, denk mit.'"},
+  {n:302,cat:"kreativ",icon:"🌈",title:"Farbpalette für Kunstprojekt",desc:"KI schlägt harmonische Farbpaletten vor – abgestimmt auf Stimmung und Stil.",how:"Schreib der KI: 'Schlage mir eine harmonische Farbpalette f\u00fcr [Stimmung/Stil] f\u00fcr mein Kunstprojekt vor.'"},
+  {n:303,cat:"kreativ",icon:"🚀",title:"KI-Abenteuer beginnen",desc:"Fang einfach an! Stell der KI eine Frage, die dich wirklich beschäftigt – und lass dich überraschen.",how:"Schreib der KI: 'Was w\u00fcrdest du tun, wenn du f\u00fcr einen Tag ich w\u00e4rst? Stell mir eine Frage die mich wirklich \u00fcberrascht.'"},
+  // 🖼️ BILDER ANALYSIEREN & ERSTELLEN (50)
+  {n:304,cat:"bilder",icon:"🌿",title:"Pflanze per Foto bestimmen",desc:"Mach ein Foto von einer unbekannten Pflanze – KI nennt den Namen, Pflegetipps und ob sie giftig ist.",how:"Lade das Foto hoch und schreib: 'Was ist das für eine Pflanze? Wie pflege ich sie?'"},
+  {n:305,cat:"bilder",icon:"🍄",title:"Pilze erkennen",desc:"Pilz-Foto machen und KI fragen ob er essbar ist – mit ausführlicher Sicherheitserklärung.",how:"Foto hochladen: 'Ist dieser Pilz essbar? Beschreibe ihn genau.'"},
+  {n:306,cat:"bilder",icon:"🦋",title:"Tier- oder Insektenart bestimmen",desc:"Käfer, Schmetterling, Spinne im Garten – KI bestimmt die Art und erklärt ob sie gefährlich ist.",how:"Foto hochladen: 'Was ist das für ein Tier/Insekt? Ist es gefährlich?'"},
+  {n:307,cat:"bilder",icon:"📄",title:"Handschrift digitalisieren",desc:"Handgeschriebene Notizen, Rezepte oder Briefe fotografieren – KI transkribiert alles in Text.",how:"Foto hochladen: 'Transkribiere diesen handgeschriebenen Text bitte.'"},
+  {n:308,cat:"bilder",icon:"🍽️",title:"Speisekarte übersetzen",desc:"Fremde Speisekarte fotografieren – KI übersetzt und erklärt jedes Gericht.",how:"Foto hochladen: 'Übersetze diese Speisekarte und erkläre die Gerichte.'"},
+  {n:309,cat:"bilder",icon:"🍷",title:"Weinlabel analysieren",desc:"Weinlabel fotografieren – KI erklärt Jahrgang, Region, Rebsorte und gibt eine Einschätzung.",how:"Foto hochladen: 'Erkläre mir dieses Weinlabel – was erwartet mich?'"},
+  {n:310,cat:"bilder",icon:"🚗",title:"Autoschadensbewertung",desc:"Dellen, Kratzer oder Unfallschäden fotografieren – KI schätzt den Schaden ein.",how:"Foto hochladen: 'Schätze diesen Fahrzeugschaden ein – was kostet die Reparatur?'"},
+  {n:311,cat:"bilder",icon:"🧾",title:"Beleg & Rechnung digitalisieren",desc:"Kassenbon oder Rechnung fotografieren – KI extrahiert Datum, Betrag und Positionen als Text.",how:"Foto hochladen: 'Extrahiere alle wichtigen Daten aus diesem Beleg.'"},
+  {n:312,cat:"bilder",icon:"🌡️",title:"Schimmel & Wasserschäden einschätzen",desc:"Feuchtigkeitsflecken oder Schimmel an der Wand fotografieren – KI schätzt die Ursache ein.",how:"Foto hochladen: 'Was ist das für ein Schaden? Was sind mögliche Ursachen?'"},
+  {n:313,cat:"bilder",icon:"💊",title:"Medikament oder Pille identifizieren",desc:"Unbekannte Tablette oder Medikamentenpackung fotografieren und identifizieren lassen.",how:"Foto hochladen: 'Was ist das für ein Medikament? Was sind die Inhaltsstoffe?'"},
+  {n:314,cat:"bilder",icon:"🎨",title:"Gemälde oder Kunstwerk erkennen",desc:"Kunstwerk im Museum oder zuhause fotografieren – KI erkennt Stil, Epoche und Künstler.",how:"Foto hochladen: 'Erkenne dieses Kunstwerk und erkläre mir Stil und Entstehung.'"},
+  {n:315,cat:"bilder",icon:"🏛️",title:"Architekturstil bestimmen",desc:"Gebäude oder Fassade fotografieren – KI bestimmt Stil, Epoche und historischen Hintergrund.",how:"Foto hochladen: 'Was ist das für ein Architekturstil? Wann wurde es gebaut?'"},
+  {n:316,cat:"bilder",icon:"🥗",title:"Gericht erkennen & Rezept bekommen",desc:"Gericht im Restaurant oder beim Kochen fotografieren – KI erkennt es und liefert das Rezept.",how:"Foto hochladen: 'Was ist das für ein Gericht? Gib mir das Rezept.'"},
+  {n:317,cat:"bilder",icon:"👗",title:"Outfit beurteilen lassen",desc:"Kleidungskombination fotografieren – KI gibt ehrliches Feedback und Styling-Tipps.",how:"Foto hochladen: 'Wie wirkt dieses Outfit? Was würdest du ändern oder dazu kombinieren?'"},
+  {n:318,cat:"bilder",icon:"🔩",title:"Werkzeug oder Ersatzteil identifizieren",desc:"Unbekannte Schraube, Werkzeug oder Ersatzteil fotografieren – KI sagt was es ist.",how:"Foto hochladen: 'Was ist das für ein Teil? Wofür wird es verwendet?'"},
+  {n:319,cat:"bilder",icon:"📊",title:"Whiteboard in Text umwandeln",desc:"Meeting-Whiteboard oder Tafel fotografieren – KI wandelt alles in strukturierten Text um.",how:"Foto hochladen: 'Transkribiere den Inhalt dieses Whiteboards in strukturiertem Text.'"},
+  {n:320,cat:"bilder",icon:"🎵",title:"Noten lesen und erklären",desc:"Notenblatt fotografieren – KI erklärt Takt, Tonart und wie die Melodie klingt.",how:"Foto hochladen: 'Erkläre mir diese Noten – Tonart, Takt und schwierige Stellen.'"},
+  {n:321,cat:"bilder",icon:"💪",title:"Körperhaltung analysieren",desc:"Foto beim Sport oder am Schreibtisch machen – KI analysiert Haltung und gibt Korrekturtipps.",how:"Foto hochladen: 'Analysiere meine Körperhaltung und gib mir Verbesserungstipps.'"},
+  {n:322,cat:"bilder",icon:"🌱",title:"Pflanzenkrankheit diagnostizieren",desc:"Gelbe Blätter, Flecken oder Schädlingsbefall fotografieren – KI diagnostiziert das Problem.",how:"Foto hochladen: 'Was ist mit meiner Pflanze? Wie behandle ich das Problem?'"},
+  {n:323,cat:"bilder",icon:"📝",title:"Visitenkarte digitalisieren",desc:"Visitenkarte fotografieren – KI extrahiert alle Kontaktdaten als strukturierten Text.",how:"Foto hochladen: 'Extrahiere alle Kontaktdaten von dieser Visitenkarte.'"},
+  {n:324,cat:"bilder",icon:"🔍",title:"Nährwerttabelle analysieren",desc:"Lebensmittelverpackung fotografieren – KI erklärt was die Inhaltsstoffe bedeuten.",how:"Foto hochladen: 'Analysiere diese Nährwerttabelle. Was sind die wichtigsten Infos?'"},
+  {n:325,cat:"bilder",icon:"🏠",title:"Zimmer-Einrichtung analysieren",desc:"Zimmer fotografieren – KI gibt Tipps zu Farben, Möbelanordnung und Verbesserungen.",how:"Foto hochladen: 'Was würdest du an diesem Zimmer verändern? Tipps zur Einrichtung?'"},
+  {n:326,cat:"bilder",icon:"🗺️",title:"Handgeschriebene Karte digitalisieren",desc:"Alte Karte, Skizze oder Zeichnung fotografieren und in digitalen Text oder Beschreibung umwandeln.",how:"Foto hochladen: 'Beschreibe und transkribiere den Inhalt dieser Karte/Skizze.'"},
+  {n:327,cat:"bilder",icon:"🌍",title:"Fremdsprachiger Text übersetzen",desc:"Schild, Brief oder Dokument auf Fremdsprache fotografieren – KI übersetzt sofort.",how:"Foto hochladen: 'Übersetze diesen Text auf dem Foto ins Deutsche.'"},
+  {n:328,cat:"bilder",icon:"🪴",title:"Gartenproblem per Foto lösen",desc:"Kranke Pflanzen, Unkraut oder Schädlinge fotografieren – KI liefert die Lösung.",how:"Foto hochladen: 'Was ist das Problem in meinem Garten? Wie behebe ich es?'"},
+  {n:329,cat:"bilder",icon:"✍️",title:"Profilbild oder Avatar erstellen",desc:"KI erstellt auf Basis einer Beschreibung ein einzigartiges, professionelles Profilbild.",how:"Schreib der KI: 'Erstelle ein professionelles Avatar-Profilbild: [Stil, Farben, Aussehen]'"},
+  {n:330,cat:"bilder",icon:"🎂",title:"Geburtstagskarten-Motiv erstellen",desc:"KI entwirft ein persönliches Geburtstagskarten-Design mit Wunschtext und Stil.",how:"Schreib der KI: 'Erstelle eine Geburtstagskarte für [Person]. Stil: [X]. Text: [Y]'"},
+  {n:331,cat:"bilder",icon:"🖼️",title:"Stimmungsbild für Präsentation",desc:"KI erstellt passende Illustrationen und Stimmungsbilder für deine Folien.",how:"Schreib der KI: 'Erstelle ein Stimmungsbild zum Thema [X] im Stil [minimalistisch/bunt/etc.]'"},
+  {n:332,cat:"bilder",icon:"🏡",title:"Traumhaus visualisieren",desc:"Traumhaus beschreiben – KI erstellt eine visuelle Vorstellung mit Stil und Architektur.",how:"Schreib der KI: 'Visualisiere mein Traumhaus: [Stil, Material, Farbe, Lage beschreiben]'"},
+  {n:333,cat:"bilder",icon:"🌸",title:"Gartenplanung visualisieren",desc:"Gartenwunsch beschreiben – KI erstellt eine Visualisierung der Bepflanzung und Gestaltung.",how:"Schreib der KI: 'Visualisiere meinen Garten: [Größe, Stil, Pflanzen, Elemente beschreiben]'"},
+  {n:334,cat:"bilder",icon:"🐾",title:"Haustier-Portrait im Kunststil",desc:"Haustier beschreiben – KI erstellt ein Portrait im Wunsch-Kunststil (Aquarell, Öl, Comic...).",how:"Schreib der KI: 'Erstelle ein [Aquarell]-Portrait meines Hundes/meiner Katze: [beschreiben]'"},
+  {n:335,cat:"bilder",icon:"💌",title:"Einladungskarten-Design erstellen",desc:"KI entwirft ansprechende Einladungsgrafiken für Geburtstag, Hochzeit oder Events.",how:"Schreib der KI: 'Erstelle eine Einladungskarte für [Event]. Stil: [X]. Farben: [Y]'"},
+  {n:336,cat:"bilder",icon:"🦸",title:"Comic-Figur von sich erstellen",desc:"Dich selbst als Comicfigur, Superhelden oder Cartoon-Version beschreiben und visualisieren lassen.",how:"Schreib der KI: 'Erstelle mich als Comicfigur: [Aussehen, Persönlichkeit, Superkraft]'"},
+  {n:337,cat:"bilder",icon:"🎨",title:"Logo-Ideen entwickeln",desc:"Markenname und Werte beschreiben – KI skizziert Logo-Konzepte mit Beschreibung und Symbolik.",how:"Schreib der KI: 'Beschreibe 3 Logo-Ideen für [Marke]. Werte: [X]. Zielgruppe: [Y]'"},
+  {n:338,cat:"bilder",icon:"🌄",title:"Hintergrundbild/Wallpaper erstellen",desc:"KI erstellt ein einzigartiges Wallpaper nach Wunschthema und Stimmung.",how:"Schreib der KI: 'Erstelle ein Wallpaper im Format 16:9 zum Thema [X] in Stimmung [Y]'"},
+  {n:339,cat:"bilder",icon:"🌺",title:"Social-Media-Grafik erstellen",desc:"KI gestaltet Grafiken für Instagram, LinkedIn oder Facebook nach deinem Briefing.",how:"Schreib der KI: 'Erstelle eine Instagram-Grafik zu [Thema] im Stil [minimalistisch/bunt]'"},
+  {n:340,cat:"bilder",icon:"🎃",title:"Saisonales Karten-Motiv",desc:"KI erstellt Bildmotive für Weihnachten, Ostern, Halloween oder andere Anlässe.",how:"Schreib der KI: 'Erstelle ein [Weihnachts]-Kartenmotiv. Stil: [gemütlich/modern/lustig]'"},
+  {n:341,cat:"bilder",icon:"📸",title:"Produktfoto-Hintergrund generieren",desc:"Produkt beschreiben – KI generiert einen professionellen, passenden Studiohintergrund.",how:"Schreib der KI: 'Generiere einen Produktfoto-Hintergrund für [Produkt]. Stil: [X]'"},
+  {n:342,cat:"bilder",icon:"✏️",title:"Tattoo-Idee skizzieren lassen",desc:"KI entwirft Tattoo-Motive nach deinen Wünschen mit Symbolik und Stilbeschreibung.",how:"Schreib der KI: 'Beschreibe ein Tattoo-Motiv für mich: Bedeutung [X], Stil [Y], Körperstelle [Z]'"},
+  {n:343,cat:"bilder",icon:"📚",title:"Kinderbuchillustration erstellen",desc:"KI erstellt Bildideen und Illustrationen für selbst geschriebene Kinderbücher.",how:"Schreib der KI: 'Erstelle eine Kinderbuchillustration: [Szene beschreiben, Stil, Alter der Kinder]'"},
+  {n:344,cat:"bilder",icon:"🗺️",title:"Reise-Erinnerungsbild erstellen",desc:"Reisemomente in Worte fassen – KI erstellt ein künstlerisches Erinnerungsbild.",how:"Schreib der KI: 'Erstelle ein Erinnerungsbild meiner Reise nach [Ort]: [Szene beschreiben]'"},
+  {n:345,cat:"bilder",icon:"🏋️",title:"Fitness-Übung visualisieren",desc:"KI erstellt beschriftete Illustrationen von Trainingsübungen für deinen Trainingsplan.",how:"Schreib der KI: 'Erstelle eine illustrierte Anleitung für die Übung [X] mit korrekter Form.'"},
+  {n:346,cat:"bilder",icon:"🍰",title:"Rezeptkarte visuell gestalten",desc:"KI erstellt ein ansprechendes Layout für eine Rezeptkarte zum Ausdrucken oder Teilen.",how:"Schreib der KI: 'Gestalte eine Rezeptkarte für [Rezept]. Stil: [rustikal/modern/bunt]'"},
+  {n:347,cat:"bilder",icon:"🌙",title:"Traumsequenz oder Vision visualisieren",desc:"Einen Traum oder eine kreative Idee in Worte fassen – KI macht daraus ein Bild.",how:"Schreib der KI: 'Visualisiere diesen Traum/diese Idee: [detailliert beschreiben]'"},
+  {n:348,cat:"bilder",icon:"👔",title:"Modedesign-Idee skizzieren",desc:"Kleidungsstück oder Kollektionsidee beschreiben – KI skizziert das Design mit Beschreibung.",how:"Schreib der KI: 'Skizziere dieses Kleidungsstück: [Schnitt, Stoff, Farbe, Details beschreiben]'"},
+  {n:349,cat:"bilder",icon:"🏙️",title:"Stadtplanungs-Vision visualisieren",desc:"Traumviertel oder Städtebau-Idee beschreiben – KI visualisiert deine urbane Vision.",how:"Schreib der KI: 'Visualisiere meine Idee für einen nachhaltigen Stadtplatz: [Details]'"},
+  {n:350,cat:"bilder",icon:"📰",title:"Infografik-Idee entwickeln",desc:"KI beschreibt Aufbau und Inhalt einer Infografik zu deinem Wunschthema.",how:"Schreib der KI: 'Entwirf eine Infografik zu [Thema]. Zielgruppe: [X]. Kernaussagen: [Y]'"},
+  {n:351,cat:"bilder",icon:"🔮",title:"Zukünftiges Ich visualisieren",desc:"KI hilft dir, eine Bild-Beschreibung deines zukünftigen Lebens zu entwickeln – als Vision Board.",how:"Schreib der KI: 'Hilf mir ein Vision Board zu beschreiben: Wo bin ich in 5 Jahren?'"},
+  {n:352,cat:"bilder",icon:"🎬",title:"Filmszene neu interpretieren",desc:"Lieblingsfilmszene oder Buchmoment beschreiben – KI gestaltet eine künstlerische Neuinterpretation.",how:"Schreib der KI: 'Erstelle eine Bild-Beschreibung dieser Filmszene im Stil [Impressionismus/etc.]'"},
+  {n:353,cat:"bilder",icon:"🧩",title:"Rätsel- oder Spielkarten-Design",desc:"KI entwirft Illustrationen und Texte für selbst gemachte Spiele, Quiz-Karten oder Puzzle.",how:"Schreib der KI: 'Entwirf Design-Ideen für Spielkarten zum Thema [X] für Kinder/Erwachsene.'"},
+];
+
+const catLabels = {
+  finanzen:"💰 Finanzen & Geld", haus:"🏡 Haus & Garten", auto:"🚗 Auto & Mobilität",
+  urlaub:"✈️ Urlaub & Freizeit", job:"💼 Job & Karriere", genuss:"🍳 Genuss & Küche",
+  gesundheit:"💪 Gesundheit", familie:"👨‍👩‍👧 Familie & Kinder", lernen:"📚 Lernen & Bildung",
+  kreativ:"🎨 Kreativität", bilder:"🖼️ Bilder & KI"
+};
+
+let currentFilter = 'all';
+
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  const q = document.getElementById('search').value.toLowerCase().trim();
+  let shown = 0;
+
+  ideas.forEach(idea => {
+    const matchCat = currentFilter === 'all' || idea.cat === currentFilter;
+    const matchSearch = !q || idea.title.toLowerCase().includes(q) || idea.desc.toLowerCase().includes(q) || catLabels[idea.cat].toLowerCase().includes(q);
+    if (matchCat && matchSearch) {
+      shown++;
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.setAttribute('data-cat', idea.cat);
+      card.innerHTML = `<div class="card-num">#${String(idea.n).padStart(3,'0')}</div>
+        <span class="card-icon">${idea.icon}</span>
+        <div class="card-title">${idea.title}</div>
+        <div class="card-desc">${idea.desc}</div>
+        <details class="card-how">
+          <summary>👉 So geht's</summary>
+          <p>${idea.how}</p>
+        </details>
+        <span class="card-tag">${catLabels[idea.cat]}</span>`;
+      grid.appendChild(card);
+    }
+  });
+
+  document.getElementById('count').textContent = shown;
+  document.getElementById('noResults').className = shown === 0 ? 'no-results show' : 'no-results';
+}
+
+function setFilter(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterCards();
+}
+
+function filterCards() { renderGrid(); }
+
+renderGrid();
+</script>
+</body>
+</html>
