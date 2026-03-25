@@ -90,26 +90,27 @@
   .card[data-cat="lernen"] { border-top-color: var(--learn); }
   .card[data-cat="kreativ"] { border-top-color: var(--creative); }
   .card[data-cat="bilder"] { border-top-color: var(--bilder); }
-  .card[data-cat="bilder"] .card-tag { background: var(--bilder); }
+  .card[data-cat="bilder"] .card-tag { color: var(--bilder); }
 
   .card-num { font-size: 0.75rem; font-weight: 700; color: #94a3b8; margin-bottom: 8px; }
   .card-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
   .card-title { font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 6px; line-height: 1.3; }
   .card-desc { font-size: 0.85rem; color: #64748b; line-height: 1.5; margin-bottom: 12px; }
   .card-tag {
-    display: inline-block; padding: 3px 10px; border-radius: 50px;
-    font-size: 0.72rem; font-weight: 600; color: #fff;
+    display: inline-block; padding: 2px 0;
+    font-size: 0.7rem; font-weight: 600;
+    opacity: 0.55; letter-spacing: 0.03em; text-transform: uppercase;
   }
-  .card[data-cat="finanzen"] .card-tag { background: var(--finance); }
-  .card[data-cat="haus"] .card-tag { background: var(--house); }
-  .card[data-cat="auto"] .card-tag { background: var(--car); }
-  .card[data-cat="urlaub"] .card-tag { background: var(--travel); }
-  .card[data-cat="job"] .card-tag { background: var(--job); }
-  .card[data-cat="genuss"] .card-tag { background: var(--food); }
-  .card[data-cat="gesundheit"] .card-tag { background: var(--health); }
-  .card[data-cat="familie"] .card-tag { background: var(--family); }
-  .card[data-cat="lernen"] .card-tag { background: var(--learn); }
-  .card[data-cat="kreativ"] .card-tag { background: var(--creative); }
+  .card[data-cat="finanzen"] .card-tag { color: var(--finance); }
+  .card[data-cat="haus"] .card-tag { color: var(--house); }
+  .card[data-cat="auto"] .card-tag { color: var(--car); }
+  .card[data-cat="urlaub"] .card-tag { color: var(--travel); }
+  .card[data-cat="job"] .card-tag { color: var(--job); }
+  .card[data-cat="genuss"] .card-tag { color: var(--food); }
+  .card[data-cat="gesundheit"] .card-tag { color: var(--health); }
+  .card[data-cat="familie"] .card-tag { color: var(--family); }
+  .card[data-cat="lernen"] .card-tag { color: var(--learn); }
+  .card[data-cat="kreativ"] .card-tag { color: var(--creative); }
 
   .card.hidden { display: none; }
 
@@ -578,7 +579,7 @@ function renderGrid() {
         <span class="card-icon">${idea.icon}</span>
         <div class="card-title">${idea.title}</div>
         <div class="card-desc">${idea.desc}</div>
-        <details class="card-how">
+        <details class="card-how" open>
           <summary>👉 So geht's</summary>
           <p>${idea.how}</p>
         </details>
